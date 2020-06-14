@@ -45,7 +45,7 @@ class _MyApp extends State<MyApp> {
                   color: Colors.black,
                   child: new Text("Jugar",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                   onPressed: ()async{
-                    gameController.pausado=false;
+                    gameController.nuevoJuego=true;
                     await Navigator.push(context, MaterialPageRoute(builder: (context)=>NewGame()));
                   },
                 ),

@@ -1,21 +1,23 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/components/flare_component.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:starshipasteroid/asteroid.dart';
 import 'package:starshipasteroid/asteroidSpawner.dart';
 import 'package:starshipasteroid/barraVida.dart';
 import 'package:starshipasteroid/contadorPuntos.dart';
 
+import 'package:flame/components/flare_component.dart';
+import 'package:flare_flutter/flare_actor.dart';
+// import 'package:wakelock/wakelock.dart';
 import 'jugador.dart';
 
 class GameController extends Game{
   bool pausado=false;
+  bool nuevoJuego=false;
   Size screenSize;
   double tileSize;
   Jugador nave;
@@ -28,7 +30,9 @@ class GameController extends Game{
   ContadorPuntos contador;
   
   GameController(){
-    inicialize();
+      inicialize();
+    // if(nuevoJuego==true){
+    // }
   }
 
   void inicialize() async{
@@ -100,4 +104,19 @@ class GameController extends Game{
     }
     asts.add(Asteroid(this,x,y));
   }
+  void restartGame(){
+    puntos=0;
+    asts.clear();
+  }
+   @override
+  void lifecycleStateChange(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) {
+      pausado = true;
+    }
+    else{
+      pausado = false;
+    }
+  }
+
+
 }

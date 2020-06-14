@@ -63,6 +63,9 @@ class _MyApp extends State<NewGame> {
                               color: Colors.transparent,
                               child: new Text("Reiniciar",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                               onPressed: (){
+                                Navigator.pop(context);
+                                gameController.restartGame();
+                                gameController.pausado=false;
                               },
                             ),
                             OutlineButton(
@@ -71,7 +74,8 @@ class _MyApp extends State<NewGame> {
                               color: Colors.transparent,
                               child: new Text("Salir a Menu",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                               onPressed: (){
-                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>new MyApp()),ModalRoute.withName('/'));
+                                gameController.nuevoJuego=false;
+                                Navigator.popUntil(context, ModalRoute.withName('/'));
                               },
                             ),
                           ],

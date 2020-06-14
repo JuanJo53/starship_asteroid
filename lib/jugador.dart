@@ -25,9 +25,7 @@ class Jugador{
   }
   void update(double t) {
     if(!muerto&&vidaActual<=0){
-      muerto=true;
-      
+      muerto=true;      
     }
-    print(vidaActual);
   }
 }
