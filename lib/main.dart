@@ -1,5 +1,7 @@
+import 'package:flame/util.dart';
 import 'package:flutter/material.dart';
 
+import 'gameController.dart';
 import 'newGame.dart';
 
 void main() {
@@ -17,9 +19,14 @@ class MyApp extends StatefulWidget{
   }
 }
 class _MyApp extends State<MyApp> {
+  GameController gameController;
+  @override
+  void initState() {
+    super.initState();
+    gameController = GameController();
+  }
   @override
   Widget build(BuildContext context) {
-    var size=MediaQuery.of(context).size;
     return Scaffold(
       body: new Container(
         decoration: BoxDecoration(
@@ -34,11 +41,14 @@ class _MyApp extends State<MyApp> {
               children: <Widget>[
                 new Image.asset('assets/images/titulo1.png',fit: BoxFit.cover,), 
                 new RaisedButton(
-                splashColor: Colors.pinkAccent,
-                color: Colors.black,
-                child: new Text("Jugar",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
-                onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>NewGame()));},
-              ),
+                  splashColor: Colors.lightBlue,
+                  color: Colors.black,
+                  child: new Text("Jugar",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                  onPressed: ()async{
+                    gameController.pausado=false;
+                    await Navigator.push(context, MaterialPageRoute(builder: (context)=>NewGame()));
+                  },
+                ),
               ],
             ),
         ),

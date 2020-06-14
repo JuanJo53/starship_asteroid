@@ -15,7 +15,7 @@ import 'package:starshipasteroid/contadorPuntos.dart';
 import 'jugador.dart';
 
 class GameController extends Game{
-    
+  bool pausado=false;
   Size screenSize;
   double tileSize;
   Jugador nave;
@@ -56,13 +56,15 @@ class GameController extends Game{
     contador.render(canvas);
     barraVida.render(canvas);
   }
-  void update(double t) {
-    spawner.update(t);
-    asts.forEach((Asteroid asteroid)=>asteroid.update(t));
-    asts.removeWhere((Asteroid asteroid)=>asteroid.destruido);
-    nave.update(t);
-    contador.update(t);
-    barraVida.update(t);
+  void update(double t) {    
+    if(pausado==false){
+      spawner.update(t);
+      asts.forEach((Asteroid asteroid)=>asteroid.update(t));
+      asts.removeWhere((Asteroid asteroid)=>asteroid.destruido);
+      nave.update(t);
+      contador.update(t);
+      barraVida.update(t);
+    }
   }
   void resize(Size size) {
     screenSize=size;

@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flame/util.dart';
 import 'package:flutter/services.dart';
 import 'package:starshipasteroid/gameController.dart';
+import 'package:starshipasteroid/main.dart';
 
 class NewGame extends StatefulWidget{
   @override
@@ -30,7 +31,68 @@ class _MyApp extends State<NewGame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: gameController.widget!=null?gameController.widget:Container(child: Text('hola'),));
+      body: new Stack(
+        children: <Widget>[
+          gameController.widget!=null?gameController.widget:Container(),
+          new RawMaterialButton(
+            onPressed: () {
+              gameController.pausado=true;
+              print('pause');
+              showDialog(context: context, 
+                builder: (context){
+                  return Theme(
+                    data: Theme.of(context).copyWith(dialogBackgroundColor:Colors.black12),    
+                    child: new AlertDialog(                      
+                      title: Center(child: Text("Juego Pausado!",style: TextStyle(color: Colors.lightGreenAccent)),),
+                      content: Column(                        
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            OutlineButton(
+                              splashColor: Colors.lightBlue,
+                              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                              color: Colors.transparent,
+                              child: new Text("Continuar",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                              onPressed: (){                                
+                                Navigator.pop(context);
+                                gameController.pausado=false;
+                              },
+                            ),
+                            OutlineButton(
+                              splashColor: Colors.lightBlue,
+                              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                              color: Colors.transparent,
+                              child: new Text("Reiniciar",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                              onPressed: (){
+                              },
+                            ),
+                            OutlineButton(
+                              splashColor: Colors.lightBlue,
+                              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                              color: Colors.transparent,
+                              child: new Text("Salir a Menu",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                              onPressed: (){
+                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>new MyApp()),ModalRoute.withName('/'));
+                              },
+                            ),
+                          ],
+                      ),
+                    )
+                  );
+                },
+              );
+            },
+            elevation: 2.0,
+            fillColor: Colors.white,
+            child: Icon(
+              Icons.pause,
+              size: 30.0,
+            ),
+            padding: EdgeInsets.all(12.0),
+            shape: CircleBorder(),
+          ),
+        ],
+      ),
+    );
   }
   void initState() {
     Start();
