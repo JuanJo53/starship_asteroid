@@ -4,6 +4,8 @@ import 'package:flame/util.dart';
 import 'package:flutter/services.dart';
 import 'package:starshipasteroid/gameController.dart';
 
+import 'newGame.dart';
+
 void main() {
   runApp(
     MaterialApp(
@@ -39,7 +41,28 @@ class _MyApp extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: gameController.widget!=null?gameController.widget:Container(child: Text('hola'),));
+      body: new Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background.jpg'), 
+            fit: BoxFit.cover)
+        ),  
+        child: new Center(
+            child: new Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Image.asset('assets/images/titulo1.png',fit: BoxFit.cover,), 
+                new RaisedButton(
+                splashColor: Colors.pinkAccent,
+                color: Colors.black,
+                child: new Text("Jugar",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>NewGame()));},
+              ),
+              ],
+            ),
+        ),
+      )
+      );
   }
   void initState() {
     Start();
