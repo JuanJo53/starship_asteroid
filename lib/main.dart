@@ -29,8 +29,7 @@ class _MyApp extends State<MyApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: new Container(
-        decoration: BoxDecoration(
-          color: Colors.red,      
+        decoration: BoxDecoration(  
           image: DecorationImage(
             image: AssetImage('assets/images/background.jpg'), 
             fit: BoxFit.cover)

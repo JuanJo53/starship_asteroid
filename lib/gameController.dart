@@ -47,7 +47,7 @@ class GameController extends Game{
   }
   void render(Canvas canvas){
     Rect fondo=Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
-    Paint fondoPaint=Paint()..color=Colors.black;
+    Paint fondoPaint=Paint()..color=Colors.transparent;
     canvas.drawRect(fondo, fondoPaint);
     // Flame.images.load('nave.png').then((Image image) {
     //   var paint = Paint()..color = Color(0xffffffff);
@@ -107,6 +107,7 @@ class GameController extends Game{
   void restartGame(){
     puntos=0;
     asts.clear();
+    nave.vidaActual=nave.vidaMaxima;
   }
    @override
   void lifecycleStateChange(AppLifecycleState state) {
@@ -117,6 +118,5 @@ class GameController extends Game{
       pausado = false;
     }
   }
-
 
 }
