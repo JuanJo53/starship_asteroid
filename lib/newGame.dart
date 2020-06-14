@@ -8,7 +8,6 @@ import 'package:starshipasteroid/main.dart';
 class NewGame extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _MyApp();
   }
 }
@@ -80,6 +79,7 @@ class _MyApp extends State<NewGame> {
                                 color: Colors.transparent,
                                 child: new Text("Salir a Menu",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                                 onPressed: (){
+                                  //TODO: Aqui hay un bug, no inicia nuevo juego, al volver al menu.
                                   gameController.nuevoJuego=false;
                                   Navigator.pop(context);
                                   Navigator.pop(context);
