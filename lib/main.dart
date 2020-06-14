@@ -32,9 +32,9 @@ class _MyApp extends State<MyApp> {
     await flameUtil.fullScreen();
     await flameUtil.setOrientation(DeviceOrientation.portraitUp);
     
-    // TapGestureRecognizer tapper = TapGestureRecognizer();
-    // tapper.onTapDown = gameController.onTapDown;
-    // flameUtil.addGestureRecognizer(tapper);
+    TapGestureRecognizer tapper = TapGestureRecognizer();
+    tapper.onTapDown = gameController.onTapDown;
+    flameUtil.addGestureRecognizer(tapper);
   }
   @override
   Widget build(BuildContext context) {
