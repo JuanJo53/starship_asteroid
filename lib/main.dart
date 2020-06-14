@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flame/util.dart';
-import 'package:flutter/services.dart';
-import 'package:starshipasteroid/gameController.dart';
 
 import 'newGame.dart';
 
@@ -17,32 +13,17 @@ void main() {
 class MyApp extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _MyApp();
   }
-
 }
-
 class _MyApp extends State<MyApp> {
-  GameController gameController;
-  void Start()async{
-    WidgetsFlutterBinding.ensureInitialized();
-    Util flameUtil = Util();
-
-    gameController = GameController();
-
-    await flameUtil.fullScreen();
-    await flameUtil.setOrientation(DeviceOrientation.portraitUp);
-    
-    TapGestureRecognizer tapper = TapGestureRecognizer();
-    tapper.onTapDown = gameController.onTapDown;
-    flameUtil.addGestureRecognizer(tapper);
-  }
   @override
   Widget build(BuildContext context) {
+    var size=MediaQuery.of(context).size;
     return Scaffold(
       body: new Container(
         decoration: BoxDecoration(
+          color: Colors.red,      
           image: DecorationImage(
             image: AssetImage('assets/images/background.jpg'), 
             fit: BoxFit.cover)
@@ -62,9 +43,6 @@ class _MyApp extends State<MyApp> {
             ),
         ),
       )
-      );
-  }
-  void initState() {
-    Start();
+    );
   }
 }

@@ -3,10 +3,10 @@ import 'package:starshipasteroid/gameController.dart';
 
 class AsteroidSpawner{
   final GameController gameController;
-  final int intervaloMaximo=300;
+  final int intervaloMaximo=3000;
   final int cambioIntervalo=700;
-  final int maxAsteroids=2;
   final int intervaloMinimo=3;
+  int maxAsteroids=2;
   int nextSpawn;
   int intervaloActual;
 
@@ -33,6 +33,9 @@ class AsteroidSpawner{
       }
       nextSpawn=now+intervaloActual;
     }
+    // if(gameController.puntos==10){
+    //   maxAsteroids++;
+    // }
   }
   
 }

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:starshipasteroid/asteroid.dart';
 import 'package:starshipasteroid/asteroidSpawner.dart';
 import 'package:starshipasteroid/barraVida.dart';
+import 'package:starshipasteroid/contadorPuntos.dart';
 
 import 'jugador.dart';
 
@@ -23,6 +24,9 @@ class GameController extends Game{
   Sprite naveSprt = Sprite('nave.png');
   Random rand;
   AsteroidSpawner spawner;
+  int puntos;
+  ContadorPuntos contador;
+  
   GameController(){
     inicialize();
   }
@@ -34,7 +38,8 @@ class GameController extends Game{
     asts=List<Asteroid>();
     spawner=AsteroidSpawner(this);
     barraVida=BarraVida(this);
-    spawnAsteroid();
+    puntos=0;
+    contador=ContadorPuntos(this);
   }
   void render(Canvas canvas){
     Rect fondo=Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
@@ -48,6 +53,7 @@ class GameController extends Game{
     // naveSprt.render(canvas);
     nave.render(canvas);
     asts.forEach((Asteroid asteroid)=>asteroid.render(canvas));
+    contador.render(canvas);
     barraVida.render(canvas);
   }
   void update(double t) {
@@ -55,6 +61,7 @@ class GameController extends Game{
     asts.forEach((Asteroid asteroid)=>asteroid.update(t));
     asts.removeWhere((Asteroid asteroid)=>asteroid.destruido);
     nave.update(t);
+    contador.update(t);
     barraVida.update(t);
   }
   void resize(Size size) {

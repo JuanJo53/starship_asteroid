@@ -59,6 +59,9 @@ class Asteroid{
       vida--;
       if(vida<=0){
         destruido=true;
+        //Aqui sera el control de los puntos respecto al tipo de asteroide.
+        gameController.puntos++;
+        
       }
     }
   }

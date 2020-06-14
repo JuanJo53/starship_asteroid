@@ -10,7 +10,6 @@ class NewGame extends StatefulWidget{
     // TODO: implement createState
     return _MyApp();
   }
-
 }
 
 class _MyApp extends State<NewGame> {
