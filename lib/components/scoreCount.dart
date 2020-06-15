@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:starshipasteroid/gameController.dart';
 
-class ContadorPuntos{
+class ScoreCount{
   final GameController gameController;
   TextPainter painter;
   Offset posicion;
 
-  ContadorPuntos(this.gameController){
+  ScoreCount(this.gameController){
     painter = TextPainter(
       textAlign: TextAlign.center,
       textDirection: TextDirection.ltr,
@@ -20,9 +20,9 @@ class ContadorPuntos{
   }
 
   void update(double t){
-    if((painter.text??'')!=gameController.puntos.toString()){
+    if((painter.text??'')!=gameController.score.toString()){
       painter.text=TextSpan(
-        text: gameController.puntos.toString(),
+        text: gameController.score.toString(),
         style: TextStyle(
           color: Colors.white,
           fontSize: 70.0,

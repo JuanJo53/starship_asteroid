@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flame/util.dart';
 import 'package:flutter/services.dart';
 import 'package:starshipasteroid/gameController.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:starshipasteroid/main.dart';
 
 class NewGame extends StatefulWidget{
@@ -16,8 +17,6 @@ class NewGame extends StatefulWidget{
 class _MyApp extends State<NewGame> {
   GameController gameController;
   void Start()async{    
-    Flame.audio.loadAll([
-    'Space_Game_Loop.mp3',]);
     Flame.images.loadAll(<String>[
       'rocket1.gif',
       'rocket_frame_0.png',
@@ -44,21 +43,9 @@ class _MyApp extends State<NewGame> {
   @override
   Widget build(BuildContext context) {    
     return Scaffold(
-      body: new Container(
-        decoration: BoxDecoration(  
-          image: DecorationImage(
-            image: AssetImage('assets/images/background.jpg'), 
-            fit: BoxFit.cover)
-        ),  
+      body: new Container( 
         child: new Stack(
           children: <Widget>[
-            Center(
-              child: new Image(
-                width: MediaQuery.of(context).size.width/3,
-                height: MediaQuery.of(context).size.height/3,
-                image: AssetImage('assets/images/rocket1.gif',), 
-              ),
-            ),
             gameController.widget!=null?gameController.widget:Container(),
             new RawMaterialButton(
               onPressed: () {
@@ -101,7 +88,7 @@ class _MyApp extends State<NewGame> {
                                 child: new Text("Salir a Menu",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                                 onPressed: (){
                                   //TODO: Aqui hay un bug, no inicia nuevo juego, al volver al menu.
-                                  gameController.nuevoJuego=false;
+                                  // gameController.nuevoJuego=false;
                                   Navigator.pop(context);
                                   Navigator.pop(context);
                                 },

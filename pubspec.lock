@@ -28,7 +28,7 @@ packages:
       name: audioplayers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.7"
+    version: "0.15.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -91,7 +91,7 @@ packages:
       name: flame
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.16.1"
+    version: "0.18.3"
   flare_dart:
     dependency: transitive
     description:
@@ -100,12 +100,12 @@ packages:
     source: hosted
     version: "2.3.4"
   flare_flutter:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flare_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.3"
+    version: "2.0.3"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -117,9 +117,14 @@ packages:
       name: flutter_svg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.4"
+    version: "0.17.4"
   flutter_test:
     dependency: "direct dev"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"

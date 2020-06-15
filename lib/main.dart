@@ -1,10 +1,10 @@
 import 'package:flame/flame.dart';
-import 'package:flame/util.dart';
 import 'package:flutter/material.dart';
 
 import 'gameController.dart';
 import 'newGame.dart';
 
+import 'package:audioplayers/audioplayers.dart';
 void main() {
   runApp(
     MaterialApp(
@@ -20,11 +20,16 @@ class MyApp extends StatefulWidget{
   }
 }
 class _MyApp extends State<MyApp> {
-    GameController gameController;
+    GameController gameController;    
+    AudioPlayer menuAudio;
   @override
-  void initState() {
+  void initState() {    
+    Flame.audio.loadAll([
+    'Space_Game_Loop.mp3',]);
     super.initState();
     gameController = GameController();
+    starMnuAudio();
+    
   }
   @override
   Widget build(BuildContext context) {
@@ -45,7 +50,8 @@ class _MyApp extends State<MyApp> {
                   color: Colors.black,
                   child: new Text("Jugar",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                   onPressed: ()async{
-                    gameController.nuevoJuego=true;
+                    // gameController.nuevoJuego=true;
+                    menuAudio.stop();
                     await Navigator.push(context, MaterialPageRoute(builder: (context)=>NewGame()));
                   },
                 ),
@@ -54,5 +60,8 @@ class _MyApp extends State<MyApp> {
         ),
       )
     );
+  }
+  void starMnuAudio() async {
+    menuAudio = await Flame.audio.loopLongAudio('Space_Game_Loop.mp3', volume: .25);
   }
 }
