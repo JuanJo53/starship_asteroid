@@ -18,6 +18,16 @@ class _MyApp extends State<NewGame> {
   void Start()async{    
     Flame.audio.loadAll([
     'Space_Game_Loop.mp3',]);
+    Flame.images.loadAll(<String>[
+      'rocket1.gif',
+      'rocket_frame_0.png',
+      'rocket_frame_1.png',
+      'rocket_frame_2.png',
+      'rocket_frame_3.png',
+      'rocket_frame_4.png',
+      'rocket_frame_5.png',
+      'rocket_frame_6.png',
+    ]);
     WidgetsFlutterBinding.ensureInitialized();
     Util flameUtil = Util();
 
@@ -32,7 +42,7 @@ class _MyApp extends State<NewGame> {
     
   }
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     return Scaffold(
       body: new Container(
         decoration: BoxDecoration(  
@@ -42,6 +52,13 @@ class _MyApp extends State<NewGame> {
         ),  
         child: new Stack(
           children: <Widget>[
+            Center(
+              child: new Image(
+                width: MediaQuery.of(context).size.width/3,
+                height: MediaQuery.of(context).size.height/3,
+                image: AssetImage('assets/images/rocket1.gif',), 
+              ),
+            ),
             gameController.widget!=null?gameController.widget:Container(),
             new RawMaterialButton(
               onPressed: () {
@@ -105,6 +122,7 @@ class _MyApp extends State<NewGame> {
               padding: EdgeInsets.all(12.0),
               shape: CircleBorder(),
             ),
+            
           ],
         ),
     ));

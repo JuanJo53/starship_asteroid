@@ -11,8 +11,6 @@ import 'package:starshipasteroid/barraVida.dart';
 import 'package:starshipasteroid/contadorPuntos.dart';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flame/components/flare_component.dart';
-import 'package:flare_flutter/flare_actor.dart';
 // import 'package:wakelock/wakelock.dart';
 import 'jugador.dart';
 
@@ -46,19 +44,14 @@ class GameController extends Game{
     barraVida=BarraVida(this);
     puntos=0;
     contador=ContadorPuntos(this);
+    //https://jap.alekhin.io/scoring-storage-sound-tutorial-flame-flutter-part-4
     menuAudio = await Flame.audio.loopLongAudio('Space_Game_Loop.mp3', volume: .25);
-    // menuAudio.play(url)
+    menuAudio.pause();
   }
   void render(Canvas canvas){
     Rect fondo=Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
     Paint fondoPaint=Paint()..color=Colors.transparent;
     canvas.drawRect(fondo, fondoPaint);
-    // Flame.images.load('nave.png').then((Image image) {
-    //   var paint = Paint()..color = Color(0xffffffff);
-    //   var rect = Rect.fromLTWH(0.0, 0.0, image.width.toDouble(), image.height.toDouble());
-    //   canvas.drawImageRect(image, rect, rect, paint);
-    // });
-    // naveSprt.render(canvas);
     nave.render(canvas);
     asts.forEach((Asteroid asteroid)=>asteroid.render(canvas));
     contador.render(canvas);
@@ -112,15 +105,7 @@ class GameController extends Game{
     puntos=0;
     asts.clear();
     nave.vidaActual=nave.vidaMaxima;
-  }
-   @override
-  void lifecycleStateChange(AppLifecycleState state) {
-    if (state != AppLifecycleState.resumed) {
-      pausado = true;
-    }
-    else{
-      pausado = false;
-    }
+    nave.muerto=false;
   }
 
 }

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/flame.dart';
+import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:starshipasteroid/gameController.dart';
 class Asteroid{
@@ -10,12 +11,14 @@ class Asteroid{
   double speed;
   Rect asteroidRect;
   bool destruido=false;
+  Sprite asteroid;
   
   Asteroid(this.gameController,double x, double y){
     vida=3;
     damage=1;
     speed=gameController.tileSize*2;
     asteroidRect=Rect.fromLTWH(x, y, gameController.tileSize*1.2, gameController.tileSize*1*2);
+    asteroid=Sprite('rocket_frame_0.png');   
   }
   void render(Canvas canvas){
     Color color;
