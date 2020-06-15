@@ -10,6 +10,7 @@ import 'package:starshipasteroid/asteroidSpawner.dart';
 import 'package:starshipasteroid/barraVida.dart';
 import 'package:starshipasteroid/contadorPuntos.dart';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/components/flare_component.dart';
 import 'package:flare_flutter/flare_actor.dart';
 // import 'package:wakelock/wakelock.dart';
@@ -23,7 +24,8 @@ class GameController extends Game{
   Jugador nave;
   List<Asteroid> asts;
   BarraVida barraVida;
-  Sprite naveSprt = Sprite('nave.png');
+  AudioPlayer menuAudio;
+  // Sprite naveSprt = Sprite('cohete-blanco-naranja.png');
   Random rand;
   AsteroidSpawner spawner;
   int puntos;
@@ -44,6 +46,8 @@ class GameController extends Game{
     barraVida=BarraVida(this);
     puntos=0;
     contador=ContadorPuntos(this);
+    menuAudio = await Flame.audio.loopLongAudio('Space_Game_Loop.mp3', volume: .25);
+    // menuAudio.play(url)
   }
   void render(Canvas canvas){
     Rect fondo=Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);

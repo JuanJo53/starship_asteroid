@@ -1,3 +1,4 @@
+import 'package:flame/flame.dart';
 import 'package:flame/util.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,7 @@ class MyApp extends StatefulWidget{
   }
 }
 class _MyApp extends State<MyApp> {
-  GameController gameController;
+    GameController gameController;
   @override
   void initState() {
     super.initState();

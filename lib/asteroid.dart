@@ -1,8 +1,8 @@
 import 'dart:ui';
 
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:starshipasteroid/gameController.dart';
-
 class Asteroid{
   final GameController gameController;
   int vida;
@@ -10,7 +10,7 @@ class Asteroid{
   double speed;
   Rect asteroidRect;
   bool destruido=false;
-
+  
   Asteroid(this.gameController,double x, double y){
     vida=3;
     damage=1;
@@ -57,6 +57,7 @@ class Asteroid{
   void onTapDown(){
     if(!destruido){
       vida--;
+      // Flame.audio.play(file);
       if(vida<=0){
         destruido=true;
         //Aqui sera el control de los puntos respecto al tipo de asteroide.

@@ -1,3 +1,4 @@
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/util.dart';
@@ -14,7 +15,9 @@ class NewGame extends StatefulWidget{
 
 class _MyApp extends State<NewGame> {
   GameController gameController;
-  void Start()async{
+  void Start()async{    
+    Flame.audio.loadAll([
+    'Space_Game_Loop.mp3',]);
     WidgetsFlutterBinding.ensureInitialized();
     Util flameUtil = Util();
 
@@ -26,6 +29,7 @@ class _MyApp extends State<NewGame> {
     TapGestureRecognizer tapper = TapGestureRecognizer();
     tapper.onTapDown = gameController.onTapDown;
     flameUtil.addGestureRecognizer(tapper);
+    
   }
   @override
   Widget build(BuildContext context) {

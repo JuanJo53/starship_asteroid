@@ -20,12 +20,13 @@ class Jugador{
     vidaMaxima=vidaActual=300;
     final size =gameController.tileSize*1.5;
     jugadorRect=Rect.fromLTWH(gameController.screenSize.width/2-size/2, gameController.screenSize.height/2-size/2,size, size);
-    nave=Sprite('nave.png');
+    nave=Sprite('rocket1.gif');
+    
   }
  void render(Canvas canvas){
     Paint fondoPaint=Paint()..color=Colors.amber;    
     canvas.drawRect(jugadorRect, fondoPaint);
-    final size =gameController.tileSize*1.5;
+    final size =gameController.tileSize*5;
     nave.renderRect(canvas, Rect.fromLTWH(gameController.screenSize.width/2-size/2, gameController.screenSize.height/2-size/2,size, size));
   }
   void update(double t) {

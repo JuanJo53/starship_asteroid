@@ -18,6 +18,7 @@ class AsteroidSpawner{
     despawnAsts();
     intervaloActual=intervaloMaximo;
     nextSpawn=DateTime.now().millisecondsSinceEpoch+intervaloActual;
+    
   }
     
   void despawnAsts() {
