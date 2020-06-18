@@ -1,5 +1,7 @@
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:starshipasteroid/rankView.dart';
 
 import 'gameController.dart';
 import 'newGame.dart';
@@ -20,16 +22,20 @@ class MyApp extends StatefulWidget{
   }
 }
 class _MyApp extends State<MyApp> {
-    GameController gameController;    
-    AudioPlayer menuAudio;
+  GameController gameController;    
+  AudioPlayer menuAudio;
+  bool playingMenuAudio=false;
+  IconData musicIcon=IconData(0xe050, fontFamily: 'MaterialIcons');
+  GoogleSignIn googleSignIn=GoogleSignIn(scopes: ['email']);
   @override
   void initState() {    
     Flame.audio.loadAll([
     'Space_Game_Loop.mp3',]);
     super.initState();
+    // googleSignIn.signIn();
+    // googleSignIn.currentUser.id;
     gameController = GameController();
-    starMnuAudio();
-    
+    starMnuAudio();    
   }
   @override
   Widget build(BuildContext context) {
@@ -55,13 +61,42 @@ class _MyApp extends State<MyApp> {
                     await Navigator.push(context, MaterialPageRoute(builder: (context)=>NewGame()));
                   },
                 ),
+                new RaisedButton(
+                  splashColor: Colors.lightBlue,
+                  color: Colors.black,
+                  child: new Text("Rank",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                  onPressed: ()async{
+                    await Navigator.push(context, MaterialPageRoute(builder: (context)=>RankView()));
+                  },
+                ),
               ],
             ),
         ),
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
+        onPressed: () {
+          setState(() {
+            if (playingMenuAudio) {          
+              musicIcon=IconData(0xe04f, fontFamily: 'MaterialIcons');
+              menuAudio.pause();
+              playingMenuAudio=false;
+            } else{         
+              musicIcon=IconData(0xe050, fontFamily: 'MaterialIcons');     
+              menuAudio.resume();
+              playingMenuAudio=true;
+            }
+          });
+        },        
+        child: Icon(
+          musicIcon,
+          size: 20,
+        ),
+      ),
     );
   }
   void starMnuAudio() async {
+    playingMenuAudio=true;
     menuAudio = await Flame.audio.loopLongAudio('Space_Game_Loop.mp3', volume: .25);
   }
 }

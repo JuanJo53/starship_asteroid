@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "84954845056",
+    "firebase_url": "https://starship-asteroid.firebaseio.com",
+    "project_id": "starship-asteroid",
+    "storage_bucket": "starship-asteroid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84954845056:android:df8afc722f8dd1f63d7b65",
+        "android_client_info": {
+          "package_name": "com.example.starshipasteroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "84954845056-shqb6f99cndkhsoff0a4j24fun2m91o7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2lrQvZw5VCZLaYe9vFgwl6yfFwbVm3_M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "84954845056-shqb6f99cndkhsoff0a4j24fun2m91o7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

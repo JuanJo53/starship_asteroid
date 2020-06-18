@@ -109,7 +109,6 @@ class _MyApp extends State<NewGame> {
               padding: EdgeInsets.all(12.0),
               shape: CircleBorder(),
             ),
-            
           ],
         ),
     ));
