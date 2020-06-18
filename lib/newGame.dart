@@ -49,7 +49,7 @@ class _MyApp extends State<NewGame> {
             gameController.widget!=null?gameController.widget:Container(),
             new RawMaterialButton(
               onPressed: () {
-                gameController.pausado=true;
+                gameController.paused=true;
                 print('pause');
                 showDialog(context: context, 
                   builder: (context){
@@ -67,7 +67,7 @@ class _MyApp extends State<NewGame> {
                                 child: new Text("Continuar",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                                 onPressed: (){                                
                                   Navigator.pop(context);
-                                  gameController.pausado=false;
+                                  gameController.paused=false;
                                 },
                               ),
                               OutlineButton(
@@ -78,7 +78,7 @@ class _MyApp extends State<NewGame> {
                                 onPressed: (){
                                   Navigator.pop(context);
                                   gameController.restartGame();
-                                  gameController.pausado=false;
+                                  gameController.paused=false;
                                 },
                               ),
                               OutlineButton(
@@ -89,6 +89,7 @@ class _MyApp extends State<NewGame> {
                                 onPressed: (){
                                   //TODO: Aqui hay un bug, no inicia nuevo juego, al volver al menu.
                                   // gameController.nuevoJuego=false;
+                                  gameController.endGame();
                                   Navigator.pop(context);
                                   Navigator.pop(context);
                                 },

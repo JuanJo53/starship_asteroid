@@ -1,8 +1,10 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 class Asteroid {
   List<double> randVertices;
   Rect boxRect;
@@ -21,7 +23,8 @@ class Asteroid {
   double maxSpeed;
   double numVertices;
   double noiseMulti;
-  bool destroyed;
+  bool destroyed; 
+  AudioPlayer expAudio;  
 
   Asteroid(double init_x, double init_y, double init_direction) {
     x = init_x;
@@ -88,7 +91,12 @@ class Asteroid {
   }
 
   bool destroy() {
+    soundExplotion();
     destroyed = true;
     return destroyed;
+  }
+    
+  void soundExplotion() async{
+    expAudio = await Flame.audio.play('explosion_SFX.mp3', volume: .25);
   }
 }

@@ -34,8 +34,9 @@ class _MyApp extends State<MyApp> {
     super.initState();
     // googleSignIn.signIn();
     // googleSignIn.currentUser.id;
+    // googleSignIn.currentUser.displayName;
     gameController = GameController();
-    starMnuAudio();    
+    startMnuAudio();    
   }
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,7 @@ class _MyApp extends State<MyApp> {
                   color: Colors.black,
                   child: new Text("Jugar",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                   onPressed: ()async{
-                    // gameController.nuevoJuego=true;
+                    gameController.newGame=true;
                     menuAudio.stop();
                     await Navigator.push(context, MaterialPageRoute(builder: (context)=>NewGame()));
                   },
@@ -95,7 +96,7 @@ class _MyApp extends State<MyApp> {
       ),
     );
   }
-  void starMnuAudio() async {
+  void startMnuAudio() async {
     playingMenuAudio=true;
     menuAudio = await Flame.audio.loopLongAudio('Space_Game_Loop.mp3', volume: .25);
   }
