@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:starshipasteroid/rankView.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'gameController.dart';
 import 'newGame.dart';
 
@@ -25,16 +26,17 @@ class _MyApp extends State<MyApp> {
   GameController gameController;    
   AudioPlayer menuAudio;
   bool playingMenuAudio=false;
-  IconData musicIcon=IconData(0xe050, fontFamily: 'MaterialIcons');
-  GoogleSignIn googleSignIn=GoogleSignIn(scopes: ['email']);
+  IconData musicIcon=IconData(0xe050, fontFamily: 'MaterialIcons');  
+  final GoogleSignIn googleSignIn= new GoogleSignIn();
+  final FirebaseAuth _auth=FirebaseAuth.instance;
+
   @override
   void initState() {    
     Flame.audio.loadAll([
     'Space_Game_Loop.mp3',]);
     super.initState();
-    // googleSignIn.signIn();
-    // googleSignIn.currentUser.id;
-    // googleSignIn.currentUser.displayName;
+      auth();
+    
     gameController = GameController();
     startMnuAudio();    
   }
@@ -99,5 +101,30 @@ class _MyApp extends State<MyApp> {
   void startMnuAudio() async {
     playingMenuAudio=true;
     menuAudio = await Flame.audio.loopLongAudio('Space_Game_Loop.mp3', volume: .25);
+  }
+  bool isLoggedIn(){
+    if(googleSignIn.currentUser!=null){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  void auth()async{
+    GoogleSignInAccount acount=await googleSignIn.signIn();
+    GoogleSignInAuthentication Gauth=await acount.authentication.catchError((e){print("Cancelado");});
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: Gauth.accessToken,
+      idToken: Gauth.idToken,
+    );
+    Firestore.instance.collection('usuarios').add({
+      'id': googleSignIn.currentUser.id,
+      'nombre': googleSignIn.currentUser.displayName,
+      'score': 0,
+      'playTime': DateTime.now(),
+    });
+    await _auth.signInWithCredential(credential);
+    print(googleSignIn.currentUser.id);
+    print(googleSignIn.currentUser.displayName);
+
   }
 }

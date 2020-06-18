@@ -26,6 +26,7 @@ dependencies:
   flame: ^0.18.0
   cloud_firestore: ^0.13.6
   google_sign_in: ^4.5.1
+  firebase_auth: ^0.16.1
 
 dev_dependencies:
   flutter_test:

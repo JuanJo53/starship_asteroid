@@ -5,6 +5,7 @@ import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:starshipasteroid/gameController.dart';
 class Asteroid {
   List<double> randVertices;
   Rect boxRect;
@@ -25,6 +26,7 @@ class Asteroid {
   double noiseMulti;
   bool destroyed; 
   AudioPlayer expAudio;  
+  GameController gameController;
 
   Asteroid(double init_x, double init_y, double init_direction) {
     x = init_x;
@@ -78,13 +80,13 @@ class Asteroid {
   void update(double t) {
     x += cos(direction) * speed;
     y += sin(direction) * speed;
-    angle += rotationSpeed;
+    angle += rotationSpeed;    
   }
 
   bool hit(double strength) {
     size -= strength * 4;
     if (size < minSize) {
-      destroy();
+      destroy();      
       return true;
     }
     return false;

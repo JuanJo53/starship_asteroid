@@ -25,15 +25,14 @@ class ScoreCount{
         text: gameController.score.toString(),
         style: TextStyle(
           color: Colors.white,
-          fontSize: 70.0,
+          fontSize: 30.0,
           )
         );
         painter.layout();
         posicion=Offset(
           (gameController.screenSize.width/2)-(painter.width/2),
-          (gameController.screenSize.height*0.2)-(painter.height/2),
+          (gameController.screenSize.height*0.95)-(painter.height/2),
         );
     }
   }
-
 }

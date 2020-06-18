@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
@@ -9,6 +10,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:starshipasteroid/components/scoreCount.dart';
 import 'package:starshipasteroid/systems/asteroids.dart';
 import 'package:starshipasteroid/systems/bullets.dart';
 import 'package:starshipasteroid/systems/players.dart';
@@ -26,9 +29,10 @@ class GameController extends Game{
   double switchGunRadius;
   int gameEndedAt;
   int restartDelay;
-  int score;  
+  int score;
+  ScoreCount scoreCount;  
   AudioPlayer menuAudio;
-
+  GoogleSignIn googleSignIn;
   GameController() {
     initialize();
   }
@@ -45,8 +49,8 @@ class GameController extends Game{
     gameEndedAt = 0;
     restartDelay = 1000;
     score=0;
+    scoreCount=ScoreCount(this);
     startGame();
-    // scoreCount=scoreCount(this);
   }
 
   @override
@@ -54,9 +58,11 @@ class GameController extends Game{
     Rect fondo=Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
     Paint fondoPaint=Paint()..color=Colors.black;
     canvas.drawRect(fondo, fondoPaint);
+    scoreCount.render(canvas);
     asteroids.render(canvas);
     bullets.render(canvas);
     players.render(canvas);
+    scoreIncrement();
   }
 
   @override 
@@ -65,38 +71,16 @@ class GameController extends Game{
       asteroids.update(t);
       bullets.update(t);
       players.update(t);
+      scoreCount.update(t);      
     }
   }
-
   void resize(Size size) {
     screenSize = size;
   }
-
   void startGame() {
     players.addPlayer();
     inProgress = true;
     asteroids.start();
-  }
-
-  void endGame() {
-    inProgress = false;
-    asteroids.stop();
-    gameEndedAt = DateTime.now().millisecondsSinceEpoch;
-  }
-
-  void onTapDown(TapDownDetails d) {
-    if (inProgress) {
-      // double distFromCenter = sqrt(pow(screenSize.width / 2 - d.globalPosition.dx, 2) + pow(screenSize.height / 2 - d.globalPosition.dy, 2));
-      // if (distFromCenter <= switchGunRadius) {
-      //    players.switchGun();
-      // } else {
-      //    players.fireAt(d.globalPosition.dx, d.globalPosition.dy);
-      // }
-      players.fireAt(d.globalPosition.dx, d.globalPosition.dy);
-    } else if (gameEndedAt < DateTime.now().millisecondsSinceEpoch - restartDelay) {
-      // startGame();
-      print('click');
-    }   
   }
   void restartGame(){
     score=0;
@@ -106,5 +90,34 @@ class GameController extends Game{
     asteroids.stop();
     startGame();
   }
+  void endGame() {
+    inProgress = false;
+    asteroids.stop();
+    gameEndedAt = DateTime.now().millisecondsSinceEpoch;
+    // Firestore.instance.collection('usuarios').where('nombre=='+googleSignIn.currentUser.displayName);
+    
+  }
 
+  void onTapDown(TapDownDetails d) {
+    if (inProgress) {
+      players.fireAt(d.globalPosition.dx, d.globalPosition.dy);
+    } else if (gameEndedAt < DateTime.now().millisecondsSinceEpoch - restartDelay) {
+      // startGame();
+      print('click');
+    } 
+    // asteroids.asteroids.forEach((asteroid)=> asteroid.destroy()?score++:print('miss'));
+    // asteroids.asteroids.map((asteroid){
+    //   if(asteroid.destroy()){
+    //     score++;
+    //   }else{
+    //     print('miss');
+    //   }
+    // });
+  }
+  void scoreIncrement(){
+    // print(DateTime.now().second);
+    if(inProgress){
+      score++;
+    }
+  }
 }
