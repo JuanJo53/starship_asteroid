@@ -1,18 +1,16 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/sprite.dart';
-import 'package:flame/util.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:starshipasteroid/components/scoreCount.dart';
+import 'package:starshipasteroid/components/gameOver.dart';
 import 'package:starshipasteroid/systems/asteroids.dart';
 import 'package:starshipasteroid/systems/bullets.dart';
 import 'package:starshipasteroid/systems/players.dart';
@@ -36,6 +34,7 @@ class GameController extends Game{
   GoogleSignIn googleSignIn;
   String userid='';
   int currentHighscore=0;
+  GameOver gameOver;
 
   GameController() {
     initialize();
@@ -46,6 +45,7 @@ class GameController extends Game{
     asteroids = new Asteroids(screenSize.width, screenSize.height);
     bullets =  new Bullets(screenSize.width / 2, screenSize.height / 2, asteroids.asteroids);
     players = new Players(screenSize.width / 2, screenSize.height / 2, asteroids.asteroids, this.endGame, bullets.addBullet);
+    gameOver=GameOver(this);
 
     inProgress = true;
     newGame = true;
@@ -69,14 +69,19 @@ class GameController extends Game{
 
   @override
   void render(Canvas canvas) {
-    Rect fondo=Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
-    Paint fondoPaint=Paint()..color=Colors.black;
-    canvas.drawRect(fondo, fondoPaint);
-    scoreCount.render(canvas);
-    asteroids.render(canvas);
-    bullets.render(canvas);
-    players.render(canvas);
-    scoreIncrement();
+    if(newGame){
+      Rect fondo=Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
+      Paint fondoPaint=Paint()..color=Colors.black;
+      canvas.drawRect(fondo, fondoPaint);
+      scoreCount.render(canvas);
+      asteroids.render(canvas);
+      bullets.render(canvas);
+      players.render(canvas);
+      scoreIncrement();
+    }else{
+      gameOver.render(canvas);
+      print('not a new game');
+    }
   }
 
   @override 
@@ -85,7 +90,10 @@ class GameController extends Game{
       asteroids.update(t);
       bullets.update(t);
       players.update(t);
-      scoreCount.update(t);      
+      scoreCount.update(t);     
+    }
+    if(!newGame){
+      gameOver.update(t) ;
     }
   }
   void resize(Size size) {
@@ -94,6 +102,7 @@ class GameController extends Game{
   void startGame() {
     players.addPlayer();
     inProgress = true;
+    newGame=true;
     asteroids.start();
   }
   void restartGame(){
@@ -102,19 +111,19 @@ class GameController extends Game{
     players.players.clear();
     bullets.bullets.clear();
     asteroids.stop();
+    newGame=true;
     startGame();
   }
   void endGame() {
     inProgress = false;
     asteroids.stop();
     gameEndedAt = DateTime.now().millisecondsSinceEpoch;
-  
+    newGame=false;
     if(currentHighscore<score){
       Firestore.instance.collection('usuarios').document(userid).updateData({
         'score': score,
       });
     }
-    
   }
 
   void onTapDown(TapDownDetails d) {

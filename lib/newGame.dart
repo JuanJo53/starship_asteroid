@@ -56,7 +56,7 @@ class _MyApp extends State<NewGame> {
                     return Theme(
                       data: Theme.of(context).copyWith(dialogBackgroundColor:Colors.black12),    
                       child: new AlertDialog(                      
-                        title: Center(child: Text("Juego Pausado!",style: TextStyle(color: Colors.lightGreenAccent)),),
+                        title: Center(child: Text("Game Paused!",style: TextStyle(color: Colors.lightGreenAccent)),),
                         content: Column(                        
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
@@ -64,7 +64,7 @@ class _MyApp extends State<NewGame> {
                                 splashColor: Colors.lightBlue,
                                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                                 color: Colors.transparent,
-                                child: new Text("Continuar",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                                child: new Text("Continue",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                                 onPressed: (){                                
                                   Navigator.pop(context);
                                   gameController.paused=false;
@@ -74,7 +74,7 @@ class _MyApp extends State<NewGame> {
                                 splashColor: Colors.lightBlue,
                                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                                 color: Colors.transparent,
-                                child: new Text("Reiniciar",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                                child: new Text("Restart",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                                 onPressed: (){
                                   Navigator.pop(context);
                                   gameController.restartGame();
@@ -85,7 +85,7 @@ class _MyApp extends State<NewGame> {
                                 splashColor: Colors.lightBlue,
                                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                                 color: Colors.transparent,
-                                child: new Text("Salir a Menu",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                                child: new Text("Go to Menu",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                                 onPressed: (){
                                   //TODO: Aqui hay un bug, no inicia nuevo juego, al volver al menu.
                                   // gameController.nuevoJuego=false;

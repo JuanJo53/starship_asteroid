@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:starshipasteroid/gameController.dart';
 class Asteroid {

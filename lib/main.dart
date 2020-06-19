@@ -35,6 +35,7 @@ class _MyApp extends State<MyApp> {
     Flame.audio.loadAll([
     'Space_Game_Loop.mp3',]);
     super.initState();
+    signOut();
     auth();    
     gameController = GameController();
     startMnuAudio();    
@@ -57,7 +58,7 @@ class _MyApp extends State<MyApp> {
                 new RaisedButton(
                   splashColor: Colors.lightBlue,
                   color: Colors.black,
-                  child: new Text("Jugar",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                  child: new Text("Play",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                   onPressed: ()async{
                     gameController.newGame=true;
                     menuAudio.stop();
@@ -75,7 +76,7 @@ class _MyApp extends State<MyApp> {
                 new RaisedButton(
                   splashColor: Colors.lightBlue,
                   color: Colors.black,
-                  child: new Text("Cambiar Cuenta",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                  child: new Text("Change Account",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                   onPressed: ()async{
                     await signOut();
                     await auth();
@@ -129,14 +130,16 @@ class _MyApp extends State<MyApp> {
           accessToken: Gauth.accessToken,
           idToken: Gauth.idToken,
         );
-        AuthResult auth= await _auth.signInWithCredential(credential);      
-        Firestore.instance.collection('usuarios').document(auth.user.uid).setData(
-          {
-            'nombre': googleSignIn.currentUser.displayName,
-            'score': 0,
-            'playTime': DateTime.now(),
-          }
-        );
+        AuthResult auth= await _auth.signInWithCredential(credential);   
+        if(Firestore.instance.collection('usuarios').document(auth.user.uid).documentID==''){
+          Firestore.instance.collection('usuarios').document(auth.user.uid).setData(
+            {
+              'nombre': googleSignIn.currentUser.displayName,
+              'score': 0,
+              'playTime': DateTime.now(),
+            }
+          );
+        }  
       }
     }catch(e){
       print('Error al hacer el auth.\n'+e);
