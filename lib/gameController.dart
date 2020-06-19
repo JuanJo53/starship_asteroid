@@ -94,7 +94,7 @@ class GameController extends Game{
     inProgress = false;
     asteroids.stop();
     gameEndedAt = DateTime.now().millisecondsSinceEpoch;
-    // Firestore.instance.collection('usuarios').where('nombre=='+googleSignIn.currentUser.displayName);
+    // Firestore.instance.collection('usuarios').where('id=='+googleSignIn.currentUser.id);
     
   }
 

@@ -35,13 +35,13 @@ class _MyApp extends State<MyApp> {
     Flame.audio.loadAll([
     'Space_Game_Loop.mp3',]);
     super.initState();
-      auth();
-    
+    auth();    
     gameController = GameController();
     startMnuAudio();    
   }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: new Container(
         decoration: BoxDecoration(  
@@ -72,6 +72,15 @@ class _MyApp extends State<MyApp> {
                     await Navigator.push(context, MaterialPageRoute(builder: (context)=>RankView()));
                   },
                 ),
+                new RaisedButton(
+                  splashColor: Colors.lightBlue,
+                  color: Colors.black,
+                  child: new Text("Cambiar Cuenta",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                  onPressed: ()async{
+                    await signOut();
+                    await auth();
+                  },
+                ),
               ],
             ),
         ),
@@ -100,31 +109,42 @@ class _MyApp extends State<MyApp> {
   }
   void startMnuAudio() async {
     playingMenuAudio=true;
-    menuAudio = await Flame.audio.loopLongAudio('Space_Game_Loop.mp3', volume: .25);
+    // menuAudio = await Flame.audio.loopLongAudio('Space_Game_Loop.mp3', volume: .25);
   }
-  bool isLoggedIn(){
-    if(googleSignIn.currentUser!=null){
+  Future<bool> isLoggedIn()async{
+    FirebaseUser user=await FirebaseAuth.instance.currentUser();
+    if(user!=null){
       return true;
     }else{
       return false;
     }
   }
   void auth()async{
-    GoogleSignInAccount acount=await googleSignIn.signIn();
-    GoogleSignInAuthentication Gauth=await acount.authentication.catchError((e){print("Cancelado");});
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: Gauth.accessToken,
-      idToken: Gauth.idToken,
-    );
-    Firestore.instance.collection('usuarios').add({
-      'id': googleSignIn.currentUser.id,
-      'nombre': googleSignIn.currentUser.displayName,
-      'score': 0,
-      'playTime': DateTime.now(),
-    });
-    await _auth.signInWithCredential(credential);
-    print(googleSignIn.currentUser.id);
-    print(googleSignIn.currentUser.displayName);
-
+    try{
+      FirebaseUser user=await FirebaseAuth.instance.currentUser();
+      if(user==null){      
+        GoogleSignInAccount acount=await googleSignIn.signIn();
+        GoogleSignInAuthentication Gauth=await acount.authentication.catchError((e){print("Cancelado");});
+        final AuthCredential credential = GoogleAuthProvider.getCredential(
+          accessToken: Gauth.accessToken,
+          idToken: Gauth.idToken,
+        );
+        AuthResult auth= await _auth.signInWithCredential(credential);      
+        Firestore.instance.collection('usuarios').document(auth.user.uid).setData(
+          {
+            'nombre': googleSignIn.currentUser.displayName,
+            'score': 0,
+            'playTime': DateTime.now(),
+          }
+        );
+      }
+    }catch(e){
+      print('Error al hacer el auth.\n'+e);
+    }
+  }
+  void signOut()async{
+    print('signedout');
+    await FirebaseAuth.instance.signOut();
+    await googleSignIn.signOut();
   }
 }
