@@ -34,11 +34,11 @@ class Asteroid {
     direction = init_direction;
 
     minSize = 10;
-    maxSize = 20;
+    maxSize = 40;
     randVertices = List<double>();
     maxRotationSpeed = 0.04;
     minSpeed = 1;
-    maxSpeed = 2;
+    maxSpeed = 4;
     numVertices = 20;
     noiseMulti = 2;
     destroyed = false;

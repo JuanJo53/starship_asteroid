@@ -109,7 +109,7 @@ class _MyApp extends State<MyApp> {
   }
   void startMnuAudio() async {
     playingMenuAudio=true;
-    // menuAudio = await Flame.audio.loopLongAudio('Space_Game_Loop.mp3', volume: .25);
+    menuAudio = await Flame.audio.loopLongAudio('Space_Game_Loop.mp3', volume: .25);
   }
   Future<bool> isLoggedIn()async{
     FirebaseUser user=await FirebaseAuth.instance.currentUser();

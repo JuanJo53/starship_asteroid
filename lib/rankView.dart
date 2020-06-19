@@ -66,7 +66,6 @@ class _MyApp extends State<RankView>{
                   child: ListView.builder(
                     itemCount: snapshot.data.documents.length,
                     itemBuilder: (context,index)  {
-                      print(userId);
                       if(userId==snapshot.data.documents[index].documentID){
                         return Row(
                           children: <Widget>[
@@ -144,7 +143,6 @@ class _MyApp extends State<RankView>{
   }
   Future<String> setUserId() async {
     FirebaseUser user=await FirebaseAuth.instance.currentUser();
-    print(user.toString()+'kasdo');
     return user.uid;
   }
 }

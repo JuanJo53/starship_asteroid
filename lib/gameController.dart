@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
@@ -33,6 +34,9 @@ class GameController extends Game{
   ScoreCount scoreCount;  
   AudioPlayer menuAudio;
   GoogleSignIn googleSignIn;
+  String userid='';
+  int currentHighscore=0;
+
   GameController() {
     initialize();
   }
@@ -51,6 +55,16 @@ class GameController extends Game{
     score=0;
     scoreCount=ScoreCount(this);
     startGame();
+    await setUserId().then((value){
+      userid=value;
+    });
+    await Firestore.instance.collection('usuarios').document(userid).get().then((doc){
+      if(doc.exists){
+        currentHighscore=doc.data['score'];
+      }else{
+        print('No se identifico al documento');
+      }
+    });
   }
 
   @override
@@ -94,7 +108,12 @@ class GameController extends Game{
     inProgress = false;
     asteroids.stop();
     gameEndedAt = DateTime.now().millisecondsSinceEpoch;
-    // Firestore.instance.collection('usuarios').where('id=='+googleSignIn.currentUser.id);
+  
+    if(currentHighscore<score){
+      Firestore.instance.collection('usuarios').document(userid).updateData({
+        'score': score,
+      });
+    }
     
   }
 
@@ -105,19 +124,23 @@ class GameController extends Game{
       // startGame();
       print('click');
     } 
-    // asteroids.asteroids.forEach((asteroid)=> asteroid.destroy()?score++:print('miss'));
-    // asteroids.asteroids.map((asteroid){
-    //   if(asteroid.destroy()){
-    //     score++;
-    //   }else{
-    //     print('miss');
-    //   }
-    // });
   }
   void scoreIncrement(){
     // print(DateTime.now().second);
     if(inProgress){
       score++;
     }
+  }
+  Future<bool> signedIn() async {
+    FirebaseUser user=await FirebaseAuth.instance.currentUser();
+    if(user!=null){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  Future<String> setUserId() async {
+    FirebaseUser user=await FirebaseAuth.instance.currentUser();
+    return user.uid;
   }
 }
