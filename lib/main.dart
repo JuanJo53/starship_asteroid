@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:starshipasteroid/rankView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,12 +24,15 @@ class MyApp extends StatefulWidget{
   }
 }
 class _MyApp extends State<MyApp> {
+  Size size;
   GameController gameController;    
   AudioPlayer menuAudio;
   bool playingMenuAudio=false;
   IconData musicIcon=IconData(0xe050, fontFamily: 'MaterialIcons');  
   final GoogleSignIn googleSignIn= new GoogleSignIn();
   final FirebaseAuth _auth=FirebaseAuth.instance;
+  String userImage;
+  String userName;
 
   @override
   void initState() {    
@@ -36,55 +40,99 @@ class _MyApp extends State<MyApp> {
     'Space_Game_Loop.mp3',]);
     super.initState();
     // signOut();
-    auth();    
+    auth();  
+    if(googleSignIn.currentUser!=null){
+      if(googleSignIn.currentUser.photoUrl!=''){
+        userImage=googleSignIn.currentUser.photoUrl;
+        userName=googleSignIn.currentUser.displayName;
+      }else{
+        userImage='';
+      }
+    }
     gameController = GameController();
     startMnuAudio();    
   }
   @override
   Widget build(BuildContext context) {
-
+    size=MediaQuery.of(context).size;
     return Scaffold(
-      body: new Container(
-        decoration: BoxDecoration(  
-          image: DecorationImage(
-            image: AssetImage('assets/images/background.jpg'), 
-            fit: BoxFit.cover)
-        ),  
-        child: new Center(
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
+        children: <Widget>[
+          new Container(
+            decoration: BoxDecoration(  
+              image: DecorationImage(
+                image: AssetImage('assets/images/background.jpg'), 
+                fit: BoxFit.cover)
+            ),  
+            child: new Center(
+                child: new Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    new Image.asset('assets/images/titulo1.png',fit: BoxFit.cover,), 
+                    new RaisedButton(
+                      splashColor: Colors.lightBlue,
+                      color: Colors.black,
+                      child: new Text("Play",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                      onPressed: ()async{
+                        gameController.newGame=true;
+                        menuAudio.stop();
+                        await Navigator.push(context, MaterialPageRoute(builder: (context)=>new NewGame()));
+                      },
+                    ),
+                    new RaisedButton(
+                      splashColor: Colors.lightBlue,
+                      color: Colors.black,
+                      child: new Text("Rank",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                      onPressed: ()async{
+                        await Navigator.push(context, MaterialPageRoute(builder: (context)=>RankView()));
+                      },
+                    ),
+                    new RaisedButton(
+                      splashColor: Colors.lightBlue,
+                      color: Colors.black,
+                      child: new Text("Change Account",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                      onPressed: ()async{
+                        // await signOut();
+                        await auth();
+                        setState(() {
+                          if(googleSignIn.currentUser!=null){
+                            if(googleSignIn.currentUser.photoUrl!=''){
+                              userImage=googleSignIn.currentUser.photoUrl;
+                              userName=googleSignIn.currentUser.displayName;
+                            }
+                          }
+                        });
+                      },
+                    ),
+                    new RaisedButton(
+                      splashColor: Colors.lightBlue,
+                      color: Colors.black,
+                      child: new Text("Quit Game",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
+                      onPressed: ()async{
+                        await signOut();
+                        dispose();
+                        SystemNavigator.pop();
+                      },
+                    ),
+                  ],
+                ),
+            ),
+          ), 
+          Container(
+            child: Row(
               children: <Widget>[
-                new Image.asset('assets/images/titulo1.png',fit: BoxFit.cover,), 
-                new RaisedButton(
-                  splashColor: Colors.lightBlue,
-                  color: Colors.black,
-                  child: new Text("Play",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
-                  onPressed: ()async{
-                    gameController.newGame=true;
-                    menuAudio.stop();
-                    await Navigator.push(context, MaterialPageRoute(builder: (context)=>NewGame()));
-                  },
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(90),                  
+                  child: Image(
+                    width: size.width/8,
+                    image: NetworkImage(userImage!=null?userImage:''),
+                  ),
                 ),
-                new RaisedButton(
-                  splashColor: Colors.lightBlue,
-                  color: Colors.black,
-                  child: new Text("Rank",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
-                  onPressed: ()async{
-                    await Navigator.push(context, MaterialPageRoute(builder: (context)=>RankView()));
-                  },
-                ),
-                new RaisedButton(
-                  splashColor: Colors.lightBlue,
-                  color: Colors.black,
-                  child: new Text("Change Account",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
-                  onPressed: ()async{
-                    await signOut();
-                    await auth();
-                  },
-                ),
+                Text(userName!=null?userName:'',style: TextStyle(color: Colors.lightGreenAccent),),
               ],
             ),
-        ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
@@ -94,7 +142,7 @@ class _MyApp extends State<MyApp> {
               musicIcon=IconData(0xe04f, fontFamily: 'MaterialIcons');
               menuAudio.pause();
               playingMenuAudio=false;
-            } else{         
+            }else{         
               musicIcon=IconData(0xe050, fontFamily: 'MaterialIcons');     
               menuAudio.resume();
               playingMenuAudio=true;

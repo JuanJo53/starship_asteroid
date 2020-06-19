@@ -16,6 +16,8 @@ class NewGame extends StatefulWidget{
 
 class _MyApp extends State<NewGame> {
   GameController gameController;
+  Util flameUtil = Util();
+  TapGestureRecognizer tapper = TapGestureRecognizer();
   void Start()async{    
     Flame.images.loadAll(<String>[
       'rocket1.gif',
@@ -28,14 +30,12 @@ class _MyApp extends State<NewGame> {
       'rocket_frame_6.png',
     ]);
     WidgetsFlutterBinding.ensureInitialized();
-    Util flameUtil = Util();
-
+    
     gameController = GameController();
 
     await flameUtil.fullScreen();
     await flameUtil.setOrientation(DeviceOrientation.portraitUp);
     
-    TapGestureRecognizer tapper = TapGestureRecognizer();
     tapper.onTapDown = gameController.onTapDown;
     flameUtil.addGestureRecognizer(tapper);
     
@@ -46,7 +46,7 @@ class _MyApp extends State<NewGame> {
       body: new Container( 
         child: new Stack(
           children: <Widget>[
-            gameController.widget!=null?gameController.widget:Container(),
+            gameController.widget!=null?gameController.widget:new Container(),
             new RawMaterialButton(
               onPressed: () {
                 gameController.paused=true;
@@ -88,8 +88,10 @@ class _MyApp extends State<NewGame> {
                                 child: new Text("Go to Menu",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                                 onPressed: (){
                                   //TODO: Aqui hay un bug, no inicia nuevo juego, al volver al menu.
-                                  gameController.newGame=false;
+                                  flameUtil.removeGestureRecognizer(tapper);                                  
+                                  gameController.paused=true;
                                   gameController.endGame();
+                                  gameController=null;
                                   Navigator.pop(context);
                                   Navigator.pop(context);
                                 },
