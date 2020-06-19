@@ -150,6 +150,8 @@ class GameController extends Game{
   }
   Future<String> setUserId() async {
     FirebaseUser user=await FirebaseAuth.instance.currentUser();
-    return user.uid;
+    if(await signedIn()){
+      return user.uid;
+    }
   }
 }

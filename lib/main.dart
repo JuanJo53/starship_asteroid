@@ -35,7 +35,7 @@ class _MyApp extends State<MyApp> {
     Flame.audio.loadAll([
     'Space_Game_Loop.mp3',]);
     super.initState();
-    signOut();
+    // signOut();
     auth();    
     gameController = GameController();
     startMnuAudio();    
@@ -146,7 +146,7 @@ class _MyApp extends State<MyApp> {
     }
   }
   void signOut()async{
-    print('signedout');
+    print('signedOut');
     await FirebaseAuth.instance.signOut();
     await googleSignIn.signOut();
   }

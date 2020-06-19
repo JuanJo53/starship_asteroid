@@ -88,7 +88,7 @@ class _MyApp extends State<NewGame> {
                                 child: new Text("Go to Menu",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                                 onPressed: (){
                                   //TODO: Aqui hay un bug, no inicia nuevo juego, al volver al menu.
-                                  // gameController.nuevoJuego=false;
+                                  gameController.newGame=false;
                                   gameController.endGame();
                                   Navigator.pop(context);
                                   Navigator.pop(context);

@@ -30,13 +30,23 @@ class GameOver{
 
   void update(double t){
     if((painter.text??'')!=gameController.score.toString()){
-      painter.text=TextSpan(
-        text: 'Score: '+gameController.score.toString()+'\nYour HighScrore: '+gameController.currentHighscore.toString(),
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 30.0,
-        )
-      );
+      if(gameController.score>gameController.currentHighscore){
+        painter.text=TextSpan(
+          text: 'Score: '+gameController.score.toString()+'\nYour HighScrore: '+gameController.score.toString(),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 30.0,
+          )
+        );
+      }else{
+        painter.text=TextSpan(
+          text: 'Score: '+gameController.score.toString()+'\nYour HighScrore: '+gameController.currentHighscore.toString(),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 30.0,
+          )
+        );
+      }
       painter.layout();
       posicion=Offset(
         (gameController.screenSize.width/2)-(painter.width/2),
