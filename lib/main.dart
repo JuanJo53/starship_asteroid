@@ -5,11 +5,15 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:starshipasteroid/rankView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:starshipasteroid/repository/userRepository.dart';
 import 'gameController.dart';
 import 'newGame.dart';
 
 import 'package:audioplayers/audioplayers.dart';
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  final UserRepository userRepository=UserRepository();
+  
   runApp(
     MaterialApp(
       home: MyApp()
@@ -92,7 +96,7 @@ class _MyApp extends State<MyApp> {
                       color: Colors.black,
                       child: new Text("Change Account",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                       onPressed: ()async{
-                        // await signOut();
+                        await signOut();
                         await auth();
                         setState(() {
                           if(googleSignIn.currentUser!=null){
