@@ -25,8 +25,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     }
     if(event is LoggedOut){
       yield* _mapLoggedOutToState();
-    }
-    
+    }    
   }
   Stream<AuthenticationState> _mapAppStartedToState()async*{
     try{
@@ -43,7 +42,11 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     }
   }
   Stream<AuthenticationState> _mapLoggedInToState()async*{
-    yield Authenticated(await _userRepository.getUser(),await _userRepository.getUserImage());
+    try{
+      yield Authenticated(await _userRepository.getUser(),await _userRepository.getUserImage());
+    }catch(_){
+      yield Unauthenticated();
+    }
   }
   Stream<AuthenticationState> _mapLoggedOutToState()async*{
     yield Unauthenticated();

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:starshipasteroid/bloc/login_bloc/login_bloc.dart';
 import 'package:starshipasteroid/repository/userRepository.dart';
 import 'package:starshipasteroid/ui/googleLogInButton.dart';
+import 'package:starshipasteroid/ui/login_options.dart';
 class LoginScreen extends StatelessWidget {
   final UserRepository _userRepository;
 
@@ -16,16 +17,11 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text('You Must Login With a Google Account!'),
+        title: Text('Login With a Google Account!'),
       ),
       body: BlocProvider<LoginBloc>(
         create: (context)=>LoginBloc(userRepository: _userRepository),
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 20),
-          child: Center(
-            child: GoogleLogInGoogle(),
-          ),
-        )
+        child: LoginOptions(userRepository: _userRepository),
       ),
       backgroundColor: Colors.black,
     );
