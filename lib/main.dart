@@ -46,13 +46,12 @@ class App extends StatelessWidget{
     return MaterialApp(
       home: BlocBuilder<AuthenticationBloc,AuthenticationState>(
         builder: (context,state){
+          print(state);
           if(state is Uninitialized){
              return SplashScreen();
-          }
-          if(state is Authenticated){
+          }else if(state is Authenticated){
              return Home(userName: state.displayName, userImage: state.urlImage);
-          }
-          if(state is Unauthenticated){
+          }else if(state is Unauthenticated){
              return LoginScreen(userRepository: _userRepository);
           }
           return Container();

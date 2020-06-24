@@ -18,7 +18,7 @@ class UserRepository{
   }
 
   Future<void> signOut()async{
-    return Future.wait([_googleSignIn.signOut()]);
+    return Future.wait([_googleSignIn.signOut(),_firebaseAuth.signOut(),]);
   }
 
   Future <bool> isSignedIn()async{

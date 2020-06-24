@@ -20,7 +20,7 @@ class LoginState {
     return LoginState(isSuccess: false, isFailure: true);
   }
   factory LoginState.success(){
-    return LoginState(isSuccess: true, isFailure: true);
+    return LoginState(isSuccess: true, isFailure: false);
   }
 
   LoginState copyWith({

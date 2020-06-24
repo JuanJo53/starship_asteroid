@@ -60,7 +60,7 @@ class Home extends StatelessWidget {
                       splashColor: Colors.lightBlue,
                       color: Colors.black,
                       child: new Text("Change Account",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
-                      onPressed: ()async{
+                      onPressed: (){
                         BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
                         // await auth();
                         // setState(() {
@@ -77,7 +77,7 @@ class Home extends StatelessWidget {
                       splashColor: Colors.lightBlue,
                       color: Colors.black,
                       child: new Text("Quit Game",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
-                      onPressed: ()async{
+                      onPressed: (){
                         BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
                         SystemNavigator.pop();
                       },
