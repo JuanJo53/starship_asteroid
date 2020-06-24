@@ -11,13 +11,14 @@ abstract class AuthenticationState{
 
  class Authenticated extends AuthenticationState{
    final String displayName;
+   final String urlImage;
 
-   const Authenticated(this.displayName);
+   const Authenticated(this.displayName, this.urlImage);
 
    @override
-   List<Object>get props=> [displayName];
+   List<Object>get props=> [displayName,urlImage];
 
-   @override String tiString()=> 'Autenticado - displayName: $displayName';
+   @override String toString()=> 'Autenticado - displayName: $displayName';
  }
  class Unauthenticated extends AuthenticationState{
    @override

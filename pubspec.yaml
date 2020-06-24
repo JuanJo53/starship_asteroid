@@ -28,6 +28,8 @@ dependencies:
   google_sign_in: ^4.5.1
   firebase_auth: ^0.16.1
   flutter_bloc: ^4.0.1
+  bloc: ^4.0.0
+  flutter_auth_buttons: ^0.8.0
 
 dev_dependencies:
   flutter_test:

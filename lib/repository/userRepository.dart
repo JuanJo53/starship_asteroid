@@ -29,5 +29,8 @@ class UserRepository{
   Future<String> getUser()async{
     return (await _firebaseAuth.currentUser()).displayName; 
   }
+  Future<String> getUserImage()async{
+    return (await _firebaseAuth.currentUser()).photoUrl; 
+  }
   
 }

@@ -33,7 +33,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       final isSignedIn= await _userRepository.isSignedIn();
       if(isSignedIn){
         final user = await _userRepository.getUser();
-        yield Authenticated(user);
+        final image = await _userRepository.getUserImage();
+        yield Authenticated(user,image);
       }else{
         yield Unauthenticated();
       }
@@ -42,7 +43,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     }
   }
   Stream<AuthenticationState> _mapLoggedInToState()async*{
-    yield Authenticated(await _userRepository.getUser());
+    yield Authenticated(await _userRepository.getUser(),await _userRepository.getUserImage());
   }
   Stream<AuthenticationState> _mapLoggedOutToState()async*{
     yield Unauthenticated();
