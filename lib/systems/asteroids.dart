@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:starshipasteroid/components/asteroid.dart';
 
 class Asteroids {
-  List<Asteroid> asteroids;
-  double spawnRadius; 
-  double boundRadius; 
-  double directionNoise; 
-  double spawnRate;
-  double minSpawnRate;
-  double maxSpawnRate;
-  double spawnGrowthRate;
-  double sizeWidth;
-  double sizeHeight;
-  bool running;
+  List<Asteroid> asteroids;//Lista de objetos Asteroid, de la clase "Asteroid"
+  double spawnRadius;//Donde los asteroides aparecen 
+  double boundRadius;//Donde los asteroides son destruidos 
+  double directionNoise;//Que tanto los asteroides se alejan del centro 
+  double spawnRate;//Cuan rapido los asteroides aparecen
+  double minSpawnRate;//Minimo de rapidez entre que aparece un asteroide
+  double maxSpawnRate;//Maximo de rapidez entre que aparece un asteroide
+  double spawnGrowthRate;//Incremento de la rapidez en la que aparecen
+  double sizeWidth;//Ancho
+  double sizeHeight;//Alto
+  bool running;//Booleano que representa cuando los asteroides estan apareciendo o no
 
   Asteroids(double init_sizeWidth, double init_sizeHeight) {
     sizeWidth = init_sizeWidth;
@@ -29,12 +29,12 @@ class Asteroids {
     spawnRate = minSpawnRate;
     running = false;
   }
-
+  //Se renderiza cada asteroide en la lista de asteroides
   @override
   void render(Canvas canvas) {
     asteroids.forEach((Asteroid asteroid) => asteroid.render(canvas));
   }
-
+  //Algun cambio de estado o posicion de los asteroides
   @override
   void update(double t) {
     Random rand = Random();
@@ -56,43 +56,54 @@ class Asteroids {
 
     asteroids.forEach((Asteroid asteroid) => this.hasCollidedWithMany(asteroid, asteroids));
   }
+  //Reiniciar los asteroides
   void resetAsteroids(){
-    asteroids.clear();
+    asteroids.clear();//Elimina todos los elementos en la lsita de asteroides
   }
-
+  //Esta funcion hace que se verifique a un asteroide con todos los asteroides creados, llamando a la funcion donde se verifica si hubo colision
   void hasCollidedWithMany(Asteroid object_a, List<Asteroid> objects) {
     objects.forEach((Asteroid object_b) => this.hasCollided(object_a, object_b));
   }
-
+  //Controla si hubo colision entre algun asteroide con otro asteroide
   void hasCollided(Asteroid object_a, Asteroid object_b) {
+    //La suma de sus tamaños en el limite de distancia entre ambos para que signifique colision
     double distToHit = object_a.size + object_b.size;
+    //Si la distancia limite para que signifique colision es mayor a la diferencia de sus posiciones
     if (object_a.x - object_b.x < distToHit && object_a.y - object_b.y < distToHit) {
+      //Calcula la distancia entre el asteroide "a" y el asteroide "b"
       double distBetween = sqrt(pow(object_a.x - object_b.x, 2) + pow(object_a.y - object_b.y, 2));
+      //Si la distancia entre ambos es menor al limite de distancia ente ambos para que signifique colision
       if (object_a != object_b && distBetween < distToHit) {
-        object_a.hit(0.5);
-        object_b.hit(0.5);
+        object_a.hit(0.5);//Le aplicamos daño al asteroide "a", reduciendo su tamaño
+        object_b.hit(0.5);//Le aplicamos daño al asteroide "b", reduciendo su tamaño
         
+        //Nuevo dependiento en las posiciones de los dos asteroides
         double angle = atan2(object_a.y - object_b.y, object_a.x - object_b.x);
+        //Valor normal ayuda a cambiar la direccion cuando chocan
         double normal = angle + pi;
+        //Si en la colision no se destruyo el asteroide "a"
         if (!object_a.destroyed) {
+          //Existe un cambio en la direccion del asteroide "b"
           object_b.direction = reflection(object_b.direction, normal);
         }
+        //Si en la colision no se destruyo el asteroide "b"
         if (!object_b.destroyed) {
+          //Existe un cambio en la direccion del asteroide "a"
           object_a.direction = reflection(object_a.direction, normal);
         }
       }
     }
   }
-
+  //Hace que los asteroides empiecen a aparecer
   void start() {
     running = true;
   }
-
+  //Hace que los asteroides dejen de aparecer
   void stop() {
     running = false;
     spawnRate = minSpawnRate;
   }
-
+  //Cambio de direccion del asteroide cuando chocan entre si
   double reflection(direction, normal) {
     double dx = cos(direction);
     double dy = sin(direction);
@@ -102,8 +113,9 @@ class Asteroids {
     double ry = dy - 2 * dy * pow(ny, 2);
     return atan2(ry, rx);
   }
-
+  //Devuelve como booleano si el asteroide salio de la pantalla o no
   bool offScreen(Asteroid object) {
+    //Calcula la distancia entre los bordes de pantalla y el asteroide
     double distFromCenter = sqrt(pow(sizeWidth / 2 - object.x, 2) + pow(sizeHeight / 2 - object.y, 2));
     if (distFromCenter > boundRadius) {
       return true;
