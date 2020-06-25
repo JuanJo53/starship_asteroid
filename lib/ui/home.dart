@@ -1,3 +1,4 @@
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,18 @@ import '../gameController.dart';
 import '../newGame.dart';
 import '../rankView.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget{  
+  final String userName;
+  final String userImage;
+
+  const Home({Key key, this.userName, this.userImage}) : super(key: key);
+  @override
+  State<StatefulWidget> createState() {
+    return _Home(userName: userName, userImage: userImage);
+  }
+
+}
+class _Home extends State<Home> {
   final String userName;
   final String userImage;
   
@@ -17,13 +29,17 @@ class Home extends StatelessWidget {
   AudioPlayer menuAudio;
   bool playingMenuAudio=false;
   IconData musicIcon=IconData(0xe050, fontFamily: 'MaterialIcons');  
-
-  Home({Key key, @required this.userName,@required this.userImage}) : super(key: key);
+  @override
+  void initState(){
+    gameController=GameController();
+    startMnuAudio();
+    print(playingMenuAudio);
+  }
+  _Home({Key key, @required this.userName,@required this.userImage});
 
   @override
   Widget build(BuildContext context) {
     size=MediaQuery.of(context).size;
-    BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -43,8 +59,9 @@ class Home extends StatelessWidget {
                       color: Colors.black,
                       child: new Text("Play",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                       onPressed: ()async{
-                        // gameController.newGame=true;
-                        // menuAudio.stop();
+                        gameController.newGame=true;
+                        menuAudio.stop();
+                        playingMenuAudio=false;
                         await Navigator.push(context, MaterialPageRoute(builder: (context)=>new NewGame()));
                       },
                     ),
@@ -60,17 +77,10 @@ class Home extends StatelessWidget {
                       splashColor: Colors.lightBlue,
                       color: Colors.black,
                       child: new Text("Change Account",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
-                      onPressed: (){
+                      onPressed: (){                        
+                        menuAudio.stop();
+                        playingMenuAudio=false;
                         BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
-                        // await auth();
-                        // setState(() {
-                        //   if(googleSignIn.currentUser!=null){
-                        //     if(googleSignIn.currentUser.photoUrl!=''){
-                        //       userImage=googleSignIn.currentUser.photoUrl;
-                        //       userName=googleSignIn.currentUser.displayName;
-                        //     }
-                        //   }
-                        // });
                       },
                     ),
                     new RaisedButton(
@@ -78,6 +88,8 @@ class Home extends StatelessWidget {
                       color: Colors.black,
                       child: new Text("Quit Game",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                       onPressed: (){
+                        menuAudio.stop();
+                        playingMenuAudio=false;
                         BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
                         SystemNavigator.pop();
                       },
@@ -105,17 +117,17 @@ class Home extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
         onPressed: () {
-          // setState(() {
-          //   if (playingMenuAudio) {          
-          //     musicIcon=IconData(0xe04f, fontFamily: 'MaterialIcons');
-          //     menuAudio.pause();
-          //     playingMenuAudio=false;
-          //   }else{         
-          //     musicIcon=IconData(0xe050, fontFamily: 'MaterialIcons');     
-          //     menuAudio.resume();
-          //     playingMenuAudio=true;
-          //   }
-          // });
+          setState(() {
+            if (playingMenuAudio) {          
+              musicIcon=IconData(0xe04f, fontFamily: 'MaterialIcons');
+              menuAudio.pause();
+              playingMenuAudio=false;
+            }else{          
+              musicIcon=IconData(0xe050, fontFamily: 'MaterialIcons');  
+              menuAudio.resume();
+              playingMenuAudio=true;
+            }
+          });
         },        
         child: Icon(
           musicIcon,
@@ -123,5 +135,9 @@ class Home extends StatelessWidget {
         ),
       ),
     );
+  }
+  void startMnuAudio() async {
+    playingMenuAudio=true;
+    menuAudio = await Flame.audio.loopLongAudio('Space_Game_Loop.mp3', volume: .25);
   }
 }
