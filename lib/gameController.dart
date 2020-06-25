@@ -120,6 +120,7 @@ class GameController extends Game{
   //Resetea las listas de elementos del juego y los valores relevantes.
   void restartGame(){
     score=0;
+    
     asteroids.asteroids.clear();
     players.players.clear();
     bullets.bullets.clear();
