@@ -83,7 +83,7 @@ class _MyApp extends State<NewGame> {
                                 color: Colors.transparent,
                                 child: new Text("Go to Menu",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                                 onPressed: (){
-                                  //TODO: Aqui hay un bug, no inicia nuevo juego, al volver al menu.
+                                  //TODO: Aqui hay un bug: inicia nuevo juego sobre el anterior, al volver al menu.
                                   flameUtil.removeGestureRecognizer(tapper);//Retiramos el detector de taps                                  
                                   gameController.paused=true;//Pausamos el juego
                                   gameController.endGame();//Terminamos el juego
