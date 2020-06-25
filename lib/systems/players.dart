@@ -11,12 +11,13 @@ class Players {
   Function endGame;//Funcion para terminar el juego que se pasa como parametro desde otra clase
   Function addBullet;//Funcion para crear una bala que se pasa como parametro desde otra clase
   Function addProjectile;//Funcion para crear un proyectil como tal que se pasa como parametro desde otra clase
-
-  Players(double init_x, double init_y, List<Asteroid> init_asteroids, Function end_game, Function add_bullet) {
+  Function addMissle;//Funcion para crear un misil como tal que se pasa como parametro desde otra clase
+  Players(double init_x, double init_y, List<Asteroid> init_asteroids, Function end_game,Function add_missle, Function add_bullet) {
     x = init_x;//Posicion donde estara la nave en el eje x
     y = init_y;//Posicion donde estara la nave en el eje y
     endGame = end_game;
-    addBullet = add_bullet;
+    addBullet = add_bullet;    
+    addMissle = add_missle;
 
     players = List<Player>();
     asteroids = init_asteroids;//Aqui se hace referencia la lista ya creada en el gameController de asteroides
@@ -47,6 +48,14 @@ class Players {
     players.forEach((Player player) => player.fireAt(dx, dy));
     addProjectile(dx, dy);
     return players.length > 0;
+  }
+  //Esta funcion hace el cambio de arma entre bala normal a misil y viceversa
+  void switchGun() {
+    if (addProjectile == addBullet) {
+      addProjectile = addMissle;
+    } else {
+      addProjectile = addBullet;
+    }
   }
   //Esta funcion hace que se verifique al jugador con todos los asteroides creados, llamando a la funcion donde se verifica si hubo colision
   void hasCollidedWithMany(Player player, List<Asteroid> asteroids) {

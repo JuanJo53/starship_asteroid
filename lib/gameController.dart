@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +11,8 @@ import 'package:starshipasteroid/components/scoreCount.dart';
 import 'package:starshipasteroid/components/gameOver.dart';
 import 'package:starshipasteroid/systems/asteroids.dart';
 import 'package:starshipasteroid/systems/bullets.dart';
+import 'package:starshipasteroid/systems/explosions.dart';
+import 'package:starshipasteroid/systems/missiles.dart';
 import 'package:starshipasteroid/systems/players.dart';
 // import 'package:wakelock/wakelock.dart';
 
@@ -20,10 +23,12 @@ class GameController extends Game{
   bool newGame=false; //Verifica si es nuevo juego o no.
   Asteroids asteroids; //Declaracion del conjunto de Asteroides
   Bullets bullets; //Declaracion del conjunto de balas
-  Players players; //Declaracion del conjunto de jugadores
+  Players players; //Declaracion del conjunto de jugadores  
+  Explosions explosions;//Declaracion del conjunto de explosiones
+  Missles missles;//Declaracion del conjunto de misiles
   Size screenSize; //Declaracion del tamaño de la pantalla que usaremos
   bool inProgress; //Controla si el juego esta en curso o no.
-  double switchGunRadius; 
+  double switchGunRadius;//Radio donde se hace el cambio de arma 
   int score; // Ingrementador de puntos
   ScoreCount scoreCount; //Clase que muestra el contador de los puntos
   String userid=''; //Aqui se almacena el ID del documento del usuario loggeado
@@ -38,7 +43,9 @@ class GameController extends Game{
     resize(await Flame.util.initialDimensions());
     asteroids = new Asteroids(screenSize.width, screenSize.height);
     bullets =  new Bullets(screenSize.width / 2, screenSize.height / 2, asteroids.asteroids);
-    players = new Players(screenSize.width / 2, screenSize.height / 2, asteroids.asteroids, this.endGame, bullets.addBullet);
+    explosions =  new Explosions(screenSize.width / 2, screenSize.height / 2, asteroids.asteroids);
+    missles =  new Missles(screenSize.width / 2, screenSize.height / 2, asteroids.asteroids, explosions.addExplosion);
+     players = new Players(screenSize.width / 2, screenSize.height / 2, asteroids.asteroids, this.endGame, missles.addMissle, bullets.addBullet);
     gameOver=GameOver(this);
 
     inProgress = true;
@@ -71,6 +78,8 @@ class GameController extends Game{
       scoreCount.render(canvas);
       asteroids.render(canvas);
       bullets.render(canvas);
+      explosions.render(canvas);
+      missles.render(canvas);
       players.render(canvas);
       scoreIncrement();
     }else{
@@ -86,6 +95,8 @@ class GameController extends Game{
       //Si no se pausó el juego, continua renderizando los cambios de los objetos del juego.
       asteroids.update(t);
       bullets.update(t);
+      explosions.update(t);
+      missles.update(t);
       players.update(t);
       scoreCount.update(t);     
       //Si esta pausado, todos los objetos del juego se detienen.
@@ -112,6 +123,8 @@ class GameController extends Game{
     asteroids.asteroids.clear();
     players.players.clear();
     bullets.bullets.clear();
+    explosions.explosions.clear();
+    missles.missles.clear();
     asteroids.stop();//Los asteroides dejan de aparecer.
     newGame=true;
     startGame();//Vuelve a iniciar el juego.
@@ -120,6 +133,11 @@ class GameController extends Game{
   void endGame() {
     inProgress = false;
     newGame=false;
+    asteroids.asteroids.clear();
+    players.players.clear();
+    bullets.bullets.clear();
+    explosions.explosions.clear();
+    missles.missles.clear();
     asteroids.stop();//Los asteroides dejan de aparecer.
     //Verificamos si el puntaje de la ultima partida es mayor a su mayor puntaje del usuario.
     if(currentHighscore<score){
@@ -131,10 +149,16 @@ class GameController extends Game{
   //Controla cuando se pulsa en la pantalla mientras se juega.
   void onTapDown(TapDownDetails d) {
     if (inProgress) {
-      //Mandamos la posicion donde se presiono en la pantalla, para que dispare hacia esa direccion.
-      players.fireAt(d.globalPosition.dx, d.globalPosition.dy);
+      //Calculamos la distancia entre donde se toco en pantalla y el centro
+      double distFromCenter = sqrt(pow(screenSize.width / 2 - d.globalPosition.dx, 2) + pow(screenSize.height / 2 - d.globalPosition.dy, 2));
+      //Si esa distancia esta dentro del radio determinado para cambiar de arma
+      if (distFromCenter <= switchGunRadius) {
+        players.switchGun();//Cambiamos de arma
+      } else {
+        //Mandamos la posicion donde se presiono en la pantalla, para que dispare hacia esa direccion.
+        players.fireAt(d.globalPosition.dx, d.globalPosition.dy);
+      }
     } else{
-      // startGame();
       //Si no se esta jugando, solo controlamos que isga capturando el evento de OnTapDown.
       print('click');
     } 
