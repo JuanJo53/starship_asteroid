@@ -14,7 +14,6 @@ import 'package:starshipasteroid/systems/bullets.dart';
 import 'package:starshipasteroid/systems/explosions.dart';
 import 'package:starshipasteroid/systems/missiles.dart';
 import 'package:starshipasteroid/systems/players.dart';
-// import 'package:wakelock/wakelock.dart';
 
 //Esta clase controla todos los renders existentes cuando juega una nueva partida.
 class GameController extends Game{
@@ -45,7 +44,7 @@ class GameController extends Game{
     bullets =  new Bullets(screenSize.width / 2, screenSize.height / 2, asteroids.asteroids);
     explosions =  new Explosions(screenSize.width / 2, screenSize.height / 2, asteroids.asteroids);
     missles =  new Missles(screenSize.width / 2, screenSize.height / 2, asteroids.asteroids, explosions.addExplosion);
-     players = new Players(screenSize.width / 2, screenSize.height / 2, asteroids.asteroids, this.endGame, missles.addMissle, bullets.addBullet);
+    players = new Players(screenSize.width / 2, screenSize.height / 2, asteroids.asteroids, this.endGame, missles.addMissle, bullets.addBullet);
     gameOver=GameOver(this);
 
     inProgress = true;
@@ -120,7 +119,7 @@ class GameController extends Game{
   //Resetea las listas de elementos del juego y los valores relevantes.
   void restartGame(){
     score=0;
-    
+
     asteroids.asteroids.clear();
     players.players.clear();
     bullets.bullets.clear();

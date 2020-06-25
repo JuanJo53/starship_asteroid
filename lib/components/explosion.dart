@@ -27,14 +27,14 @@ class Explosion {
     boxPaint.strokeWidth = 2;
 
     Random rand = Random();
-    //Se dibuja un ciruclo con un radio afectado por un valor aleatorio.
+    //Se dibuja un circulo con un radio afectado por un valor aleatorio.
     canvas.drawCircle(Offset(x, y), rand.nextDouble() * blastRadius, boxPaint);
   }
   //La explosion se hace mas rapida
   @override
   void update(double t) {
     if (blastRadius < maxBlastRadius) {
-      blastRadius += blastSpeed;
+      blastRadius += blastSpeed;//Aumenta el radio de la explosion
     }
   }
   //La explosion termina

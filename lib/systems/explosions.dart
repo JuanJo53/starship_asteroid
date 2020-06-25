@@ -1,14 +1,16 @@
 import 'dart:math';
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:starshipasteroid/components/asteroid.dart';
 import 'package:starshipasteroid/components/explosion.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class Explosions {
   List<Asteroid> asteroids;//Lista de objetos Asteroid, de la clase "Asteroid"
   List<Explosion> explosions;//Lista de objetos Explosion, de la clase "Explosion"
   double x;//Posicion en el eje x
   double y;//Posicion en el eje y
-
+  AudioPlayer misExpAudio;
   Explosions(double init_x, double init_y, List<Asteroid> init_asteroids) {
     //Inicializamos las variables con los datos pasados desde la clase "GameController"
     x = init_x;
@@ -35,12 +37,13 @@ class Explosions {
   void addExplosion(double dx, double dy, double blastRadius) {
     Explosion explosion = new Explosion(dx, dy, blastRadius);//Nueva explosion
     explosions.add(explosion);//Añade a lista
+    soundExplotion();//Suena el sonido de explosion
   }
   //Esta funcion hace que se verifique a la explosion con todos los asteroides creados, llamando a la funcion donde se verifica si hubo colision
   void hasCollidedWithMany(Explosion explosion, List<Asteroid> asteroids) {
     asteroids.forEach((Asteroid asteroid) => this.hasCollided(explosion, asteroid));
   }
-  //Controla si hubo colision entre e la explosion y algun asteroide
+  //Controla si hubo colision entre la explosion y algun asteroide
   void hasCollided(Explosion explosion, Asteroid asteroid) {
     //Si el asteroide no esta dentro del radio de la explosion
     if (explosion.x - asteroid.x < explosion.blastRadius + asteroid.size && explosion.y - asteroid.y < explosion.blastRadius + asteroid.size) {
@@ -51,5 +54,9 @@ class Explosions {
         asteroid.hit(1);//Le aplicamos daño al asteroide, reduciendo su tamaño
       }
     }
+  }
+  //Esta funcion reproduce el sonido de explocion de assets/audio/
+  void soundExplotion() async{
+    misExpAudio = await Flame.audio.play('Missile_Explosion_SFX.mp3', volume: .25);
   }
 }

@@ -38,22 +38,27 @@ class Asteroids {
   @override
   void update(double t) {
     Random rand = Random();
+
     if (rand.nextDouble() < spawnRate) {
-      double location = rand.nextDouble() * pi * 2;
-      double x = sizeWidth / 2 + cos(location) * spawnRadius;
-      double y = sizeHeight / 2 + sin(location) * spawnRadius;
+      double location = rand.nextDouble() * pi * 2;//Generamos punto de aparicion del asteroide
+      double x = sizeWidth / 2 + cos(location) * spawnRadius;//Posicion en eje x respecto del punto de aparicion
+      double y = sizeHeight / 2 + sin(location) * spawnRadius;//Posicion en eje y respecto del punto de aparicion
+
+      //Generamos direccion randomica del asteroide
       double direction = atan2(sizeHeight / 2 - y, sizeWidth / 2 - x) + rand.nextDouble() * directionNoise * 2 - directionNoise;
-      Asteroid asteroid = new Asteroid(x, y, direction);
-      asteroids.add(asteroid);
+      Asteroid asteroid = new Asteroid(x, y, direction);//Creamos nuevo asteroide con datos generados
+      asteroids.add(asteroid);//Agregamos el asteroide a la lista de asteroides
     }
 
+    //Si los asteroides estan apareciendo (running), es decir, que no esta en pausa o el juego no termino
     if (running && spawnRate < maxSpawnRate) {
-      spawnRate += spawnGrowthRate;
+      spawnRate += spawnGrowthRate;//El tiempo en el que aparecenlosa steroides va incrementando
     }
 
-    asteroids.forEach((Asteroid asteroid) => asteroid.update(t));
-    asteroids.removeWhere((Asteroid asteroid) => this.offScreen(asteroid) || asteroid.destroyed);
-
+    asteroids.forEach((Asteroid asteroid) => asteroid.update(t));//Se hace el update de cada asteroide
+    asteroids.removeWhere((Asteroid asteroid) => this.offScreen(asteroid) || asteroid.destroyed);//Se elimina de la lista cualquier asteroide que salio de la pantalla o esta destruido
+    
+    //Aqui se verifica si los asteroides chocaron con algun otro asteroide, se verifica con cada astroide creado
     asteroids.forEach((Asteroid asteroid) => this.hasCollidedWithMany(asteroid, asteroids));
   }
   //Reiniciar los asteroides
