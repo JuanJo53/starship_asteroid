@@ -11,10 +11,11 @@ class RankView extends StatefulWidget{
 }
     
 class _MyApp extends State<RankView>{
-  Size size;
-  String userId='';  
+  Size size;//Usaremos esto para definir tamaños de pantalla.
+  String userId='';//Aqui se almacena el ID del usuario autenticado.
   @override
   void initState(){
+    //Asignamos el ID del usuario autenticado a nuestra variable de userID
     setUserId().then((value){
       setState(() {
         userId=value;
@@ -36,20 +37,24 @@ class _MyApp extends State<RankView>{
       ),  
       child: Column(
         children: <Widget>[
+          //Cabeceras de la lista, donde tenemos los titulos de los valores que se muestran.
           Row(
             children: <Widget>[
+              //Titulo del rank del jugadores
               Container(
                 width: size.width*0.2,
                 height: 50,
                 color: Colors.white.withOpacity(0.2),
                 child: Center(child: Text('Num.',style: TextStyle(color: Colors.white),)),
               ),
+              //Titulo del nombre de los usuarios.
               Container(
                 width: size.width*0.6,
                 height: 50,
                 color: Colors.white.withOpacity(0.2),
                 child: Center(child: Text('User',style: TextStyle(color: Colors.white),)),
               ),
+              //Titulo del puntaje maximo de los jugadores.
               Container(
                 width: size.width*0.2,
                 height: 50,
@@ -59,22 +64,28 @@ class _MyApp extends State<RankView>{
             ],
           ),
           new StreamBuilder(
+            //Stream para capturar los datos de Firebase de todos los usuarios.
             stream: Firestore.instance.collection('usuarios').orderBy('score',descending: true).snapshots(),
+            //Ponemos los datos en una lista.
             builder: (context, AsyncSnapshot<QuerySnapshot>snapshot){
+              //Verificamos si nuestro query a Firestore devolvio datos o no.
               if(snapshot.hasData){
                 return Expanded(
-                  child: ListView.builder(
+                  child: ListView.builder(//Aqui enlistamos a todos los usuarios en el ranking.
                     itemCount: snapshot.data.documents.length,
                     itemBuilder: (context,index)  {
+                      //Si el usuario es el autenticado actualmente, lo marca con otro color.
                       if(userId==snapshot.data.documents[index].documentID){
                         return Row(
                           children: <Widget>[
+                            //Posicion en el Ranking del juego.
                             Container(
                               color: Colors.lightBlue.withOpacity(0.2),
                               width: size.width*0.2,
                               height: 50,
                               child: Center(child: Text((index+1).toString(),style: TextStyle(color: Colors.white),)),
                             ),
+                            //Nombre del jugador en el juego.
                             Container(
                               width: size.width*0.6,
                               height: 50,
@@ -86,6 +97,7 @@ class _MyApp extends State<RankView>{
                                 ],
                               ),
                             ),
+                            //Maximo puntaje del jugador.
                             Container(
                               width: size.width*0.2,
                               height: 50,
@@ -95,13 +107,16 @@ class _MyApp extends State<RankView>{
                           ],
                         );
                       }else{
+                        //Si no es el usuario autenticado actualmente, lo muestra sin fondo.
                         return Row(
                           children: <Widget>[
+                            //Posicion en el Ranking del juego.
                             Container(
                               width: size.width*0.2,
                               height: 50,
                               child: Center(child: Text((index+1).toString(),style: TextStyle(color: Colors.white),)),
                             ),
+                            //Nombre del jugador en el juego.
                             Container(
                               width: size.width*0.6,
                               height: 50,
@@ -112,6 +127,7 @@ class _MyApp extends State<RankView>{
                                 ],
                               ),
                             ),
+                            //Maximo puntaje del jugador.
                             Container(
                               width: size.width*0.2,
                               height: 50,
@@ -124,6 +140,7 @@ class _MyApp extends State<RankView>{
                   )
                 );
               }else{
+                //Si no captura datos imprimimos un error.
                 return Text('No se pudo obtener los datos');
               }
             },
@@ -133,6 +150,7 @@ class _MyApp extends State<RankView>{
       ),
     );
   }
+  //Verifica y devuelve un booleano si existe un usuario autenticado.
   Future<bool> signedIn() async {
     FirebaseUser user=await FirebaseAuth.instance.currentUser();
     if(user!=null){
@@ -141,6 +159,7 @@ class _MyApp extends State<RankView>{
       return false;
     }
   }
+  //Devuelve el ID del usuario autenticado.
   Future<String> setUserId() async {
     FirebaseUser user=await FirebaseAuth.instance.currentUser();
     if(await signedIn()){

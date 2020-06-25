@@ -4,9 +4,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flame/util.dart';
 import 'package:flutter/services.dart';
 import 'package:starshipasteroid/gameController.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:starshipasteroid/main.dart';
-
 class NewGame extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -15,30 +12,23 @@ class NewGame extends StatefulWidget{
 }
 
 class _MyApp extends State<NewGame> {
-  GameController gameController;
-  Util flameUtil = Util();
-  TapGestureRecognizer tapper = TapGestureRecognizer();
-  void Start()async{    
-    Flame.images.loadAll(<String>[
-      'rocket1.gif',
-      'rocket_frame_0.png',
-      'rocket_frame_1.png',
-      'rocket_frame_2.png',
-      'rocket_frame_3.png',
-      'rocket_frame_4.png',
-      'rocket_frame_5.png',
-      'rocket_frame_6.png',
-    ]);
+  GameController gameController;//Declaramos nuestro GameController
+  Util flameUtil = Util();//Declaramos el flameUtil para usar virtudes de Flame
+  TapGestureRecognizer tapper = TapGestureRecognizer();//Nos permite detectar cuando se toca la pantalla.
+  //Funcion donde se inicia el juego como tal, y 
+  void Start()async{
+    //Se inicializa el Binding de los widgets para que no hallan problemas al user Flame.
     WidgetsFlutterBinding.ensureInitialized();
     
-    gameController = GameController();
+    gameController = GameController();//Inicializamos el GameController
 
+    //Definimos el tamaño de la pantalla y la orientacion del dispositivo como vertical.
     await flameUtil.fullScreen();
     await flameUtil.setOrientation(DeviceOrientation.portraitUp);
-    
+
+    //Inicializamos nuestro detector de toques en pantalla.
     tapper.onTapDown = gameController.onTapDown;
-    flameUtil.addGestureRecognizer(tapper);
-    
+    flameUtil.addGestureRecognizer(tapper);    
   }
   @override
   Widget build(BuildContext context) {    
@@ -46,9 +36,11 @@ class _MyApp extends State<NewGame> {
       body: new Container( 
         child: new Stack(
           children: <Widget>[
+            //Llamamos al gameController como widget si es que es diferente de null.
             gameController.widget!=null?gameController.widget:new Container(),
-            new RawMaterialButton(
+            new RawMaterialButton(//Boton de Pausa en parte superior izquierda
               onPressed: () {
+              //Se pausea el juego y muestra las diferentes opciones que tenemos al pusar el juego.
                 gameController.paused=true;
                 print('pause');
                 showDialog(context: context, 
@@ -59,28 +51,32 @@ class _MyApp extends State<NewGame> {
                         title: Center(child: Text("Game Paused!",style: TextStyle(color: Colors.lightGreenAccent)),),
                         content: Column(                        
                             mainAxisAlignment: MainAxisAlignment.center,
+                            //En este children tenemos todos los botones al pausear el juego.
                             children: <Widget>[
+                              //Boton para continuar el juego
                               OutlineButton(
                                 splashColor: Colors.lightBlue,
                                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                                 color: Colors.transparent,
                                 child: new Text("Continue",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
-                                onPressed: (){                                
-                                  Navigator.pop(context);
-                                  gameController.paused=false;
+                                onPressed: (){                                                                  
+                                  Navigator.pop(context);//Se cierra el alert Dialog
+                                  gameController.paused=false;//El juego continua
                                 },
                               ),
+                              //Boton de Reiniciar el juego
                               OutlineButton(
                                 splashColor: Colors.lightBlue,
                                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                                 color: Colors.transparent,
                                 child: new Text("Restart",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                                 onPressed: (){
-                                  Navigator.pop(context);
-                                  gameController.restartGame();
-                                  gameController.paused=false;
+                                  Navigator.pop(context);//Se cierra el alert dialog
+                                  gameController.restartGame();//Reiniciamos todos los valores del juego.
+                                  gameController.paused=false;//Se despausea el juego
                                 },
                               ),
+                              //Boton para volver al menu incial
                               OutlineButton(
                                 splashColor: Colors.lightBlue,
                                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
@@ -88,12 +84,12 @@ class _MyApp extends State<NewGame> {
                                 child: new Text("Go to Menu",style: new TextStyle(fontSize: 20.0,color: Colors.lightGreenAccent),),
                                 onPressed: (){
                                   //TODO: Aqui hay un bug, no inicia nuevo juego, al volver al menu.
-                                  flameUtil.removeGestureRecognizer(tapper);                                  
-                                  gameController.paused=true;
-                                  gameController.endGame();
-                                  gameController=null;
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
+                                  flameUtil.removeGestureRecognizer(tapper);//Retiramos el detector de taps                                  
+                                  gameController.paused=true;//Pausamos el juego
+                                  gameController.endGame();//Terminamos el juego
+                                  gameController=null;//Eliminamos el GameContoller
+                                  Navigator.pop(context);//Se cierra el alert dialog
+                                  Navigator.pop(context);//Vuelve al menu
                                 },
                               ),
                             ],
@@ -116,6 +112,7 @@ class _MyApp extends State<NewGame> {
         ),
     ));
   }
+  //InitState donde se llama a la funcion start debido a que esta tiene valores asincronos.
   void initState() {
     Start();
   }
