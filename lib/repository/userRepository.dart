@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -14,13 +15,30 @@ class UserRepository{
   Future<FirebaseUser> signInWithGoogle()async{
     //Aqui se hace el signin con google
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+
     //Aqui se hace la uatenticacion con google
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
     //Declaramos las credenciales para la autenticacion con google. Donde obtenemos el access token y el id token.
     final AuthCredential credential= GoogleAuthProvider.getCredential(idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
+    
     //Usamos las credenciales para autenticarnos en firebase.
     await _firebaseAuth.signInWithCredential(credential);
-    //Retornamos al usuario autenticado
+  
+    //Agrega al usuario a la base de datos en firestore
+    var user=await _firebaseAuth.currentUser();
+    String userID= user.uid;
+    String userName= user.displayName;
+    var bd=await Firestore.instance.collection('usuarios').document(userID).get();
+    //Si el usuario ya inicio sesion antes, no se crea una nueva coleccion.
+    if(!bd.exists){
+      bd.reference.setData({
+        'nombre': userName,
+        'score': 0
+      });
+    }
+    
+    //Retornamos al usuario autenticado    
     return _firebaseAuth.currentUser();    
   }
   //Funcion que realiza el signOut
